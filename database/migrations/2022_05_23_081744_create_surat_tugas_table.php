@@ -15,7 +15,16 @@ return new class extends Migration
     {
         Schema::create('surat_tugas', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->integer('no_surat');
+            $table->integer('id_user');
+            $table->integer('nomor_izin');
+            $table->string('lingkup_kegiatan');
+            $table->string('alamat');
+            $table->date('tanggal_kegiatan');
+            $table->string('tanda_tangan');
+            $table->string('tempat_id');
+            $table->date('tanggal_ttd');
+            $table->string('nama_penandatangan');
         });
     }
 

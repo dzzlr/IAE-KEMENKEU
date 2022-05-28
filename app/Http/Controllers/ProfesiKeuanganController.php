@@ -15,7 +15,7 @@ class ProfesiKeuanganController extends Controller
      */
     public function index()
     {
-        //
+        return ProfesiKeuangan::all();
     }
 
     /**
@@ -36,7 +36,23 @@ class ProfesiKeuanganController extends Controller
      */
     public function store(StoreProfesiKeuanganRequest $request)
     {
-        //
+        $validatedData = $request->validate([
+            'id_user' => 'required',
+            'nik' => 'required',
+            'npw' => 'required',
+            'nama' => 'required',
+            'agama' => 'required',
+            'tanggal_lahir' => 'required',
+            'tempat_lahir' => 'required',
+            'alamat' => 'required',
+            'pangkat' => 'required',
+            'gelar' => 'required',
+            'jabatan' => 'required',
+            'umur' => 'required',
+        ]);
+
+        ProfesiKeuangan::create($validatedData);
+        return 'Anda berhasil menambah Profesi Keuangan!';
     }
 
     /**
@@ -47,7 +63,7 @@ class ProfesiKeuanganController extends Controller
      */
     public function show(ProfesiKeuangan $profesiKeuangan)
     {
-        //
+        return ProfesiKeuangan::where('id', $profesiKeuangan)->first();
     }
 
     /**
@@ -70,7 +86,23 @@ class ProfesiKeuanganController extends Controller
      */
     public function update(UpdateProfesiKeuanganRequest $request, ProfesiKeuangan $profesiKeuangan)
     {
-        //
+        $validatedData = $request->validate([
+            'id_user' => 'required',
+            'nik' => 'required',
+            'npw' => 'required',
+            'nama' => 'required',
+            'agama' => 'required',
+            'tanggal_lahir' => 'required',
+            'tempat_lahir' => 'required',
+            'alamat' => 'required',
+            'pangkat' => 'required',
+            'gelar' => 'required',
+            'jabatan' => 'required',
+            'umur' => 'required',
+        ]);
+
+        ProfesiKeuangan::where('id', $profesiKeuangan->id)->update($validatedData);
+        return 'Anda berhasil update Profesi Keuangan!';
     }
 
     /**
@@ -81,6 +113,7 @@ class ProfesiKeuanganController extends Controller
      */
     public function destroy(ProfesiKeuangan $profesiKeuangan)
     {
-        //
+        ProfesiKeuangan::destroy($profesiKeuangan->id);
+        return 'Anda berhasil menghapus Profesi Keuangan!';
     }
 }

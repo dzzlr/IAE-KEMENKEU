@@ -13,9 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('kebijakans', function (Blueprint $table) {
+        Schema::create('kebijakan', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->integer('nomor_peraturan');
+            $table->string('nama_peraturan');
+            $table->string('isi_peraturan');
+            $table->string('tempat_di_tempatkan');
+            $table->date('tanggal_di_tetapkan');
+            $table->string('nama_penandatanganan');
+            $table->string('tanda_tangan');
         });
     }
 

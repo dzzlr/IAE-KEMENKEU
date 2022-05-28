@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Perizinan extends Model
 {
     use HasFactory;
+    protected $table = 'perizinan';
+    public $timestamps = false;
 }

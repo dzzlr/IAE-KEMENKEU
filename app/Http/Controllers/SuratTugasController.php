@@ -15,7 +15,7 @@ class SuratTugasController extends Controller
      */
     public function index()
     {
-        //
+        return SuratTugas::all();
     }
 
     /**
@@ -36,7 +36,21 @@ class SuratTugasController extends Controller
      */
     public function store(StoreSuratTugasRequest $request)
     {
-        //
+        $validatedData = $request->validate([
+            'no_surat' => 'required',
+            'id_user' => 'required',
+            'nomor_izin' => 'required',
+            'lingkup_kegiatan' => 'required',
+            'alamat' => 'required',
+            'tanggal_kegiatan' => 'required',
+            'tanda_tangan' => 'required',
+            'tempat_id' => 'required',
+            'tanggal_ttd' => 'required',
+            'nama_penandatangan' => 'required',
+        ]);
+
+        SuratTugas::create($validatedData);
+        return 'Anda berhasil menambah Surat Tugas!';
     }
 
     /**
@@ -47,7 +61,7 @@ class SuratTugasController extends Controller
      */
     public function show(SuratTugas $suratTugas)
     {
-        //
+        return SuratTugas::where('id', $suratTugas)->first();
     }
 
     /**
@@ -70,7 +84,22 @@ class SuratTugasController extends Controller
      */
     public function update(UpdateSuratTugasRequest $request, SuratTugas $suratTugas)
     {
-        //
+        $validatedData = $request->validate([
+            'nomor_kebijakan' => 'required',
+            'no_surat' => 'required',
+            'id_user' => 'required',
+            'nomor_izin' => 'required',
+            'lingkup_kegiatan' => 'required',
+            'alamat' => 'required',
+            'tanggal_kegiatan' => 'required',
+            'tanda_tangan' => 'required',
+            'tempat_id' => 'required',
+            'tanggal_ttd' => 'required',
+            'nama_penandatangan' => 'required',
+        ]);
+
+        SuratTugas::where('id', $suratTugas->id)->update($validatedData);
+        return 'Anda berhasil update Surat Tugas!';
     }
 
     /**
@@ -81,6 +110,7 @@ class SuratTugasController extends Controller
      */
     public function destroy(SuratTugas $suratTugas)
     {
-        //
+        SuratTugas::destroy($suratTugas->id);
+        return 'Anda berhasil menghapus Surat Tugas!';
     }
 }

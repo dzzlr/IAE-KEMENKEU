@@ -13,9 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('perizinans', function (Blueprint $table) {
+        Schema::create('perizinan', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->integer('id_user');
+            $table->integer('no_izin');
+            $table->integer('no_induk');
+            $table->integer('no_register_penilai');
+            $table->string('KJPP');
+            $table->string('klasifikasi_izin');
+            $table->date('tanggal_izin');
         });
     }
 

@@ -15,7 +15,7 @@ class KebijakanController extends Controller
      */
     public function index()
     {
-        //
+        return Kebijakan::all();
     }
 
     /**
@@ -36,7 +36,18 @@ class KebijakanController extends Controller
      */
     public function store(StoreKebijakanRequest $request)
     {
-        //
+        $validatedData = $request->validate([
+            'nomor_peraturan' => 'required',
+            'nama_peraturan' => 'required',
+            'isi_peraturan' => 'required',
+            'tempat_di_tempatkan' => 'required',
+            'tanggal_di_tetapkan' => 'required',
+            'nama_penandatanganan' => 'required',
+            'tanda_tangan' => 'required',
+        ]);
+
+        Kebijakan::create($validatedData);
+        return 'Anda berhasil menambah kebijakan!';
     }
 
     /**
@@ -47,7 +58,7 @@ class KebijakanController extends Controller
      */
     public function show(Kebijakan $kebijakan)
     {
-        //
+        return Kebijakan::where('id', $kebijakan)->first();
     }
 
     /**
@@ -70,7 +81,18 @@ class KebijakanController extends Controller
      */
     public function update(UpdateKebijakanRequest $request, Kebijakan $kebijakan)
     {
-        //
+        $validatedData = $request->validate([
+            'nomor_peraturan' => 'required',
+            'nama_peraturan' => 'required',
+            'isi_peraturan' => 'required',
+            'tempat_di_tempatkan' => 'required',
+            'tanggal_di_tetapkan' => 'required',
+            'nama_penandatanganan' => 'required',
+            'tanda_tangan' => 'required',
+        ]);
+
+        Kebijakan::where('id', $kebijakan->id)->update($validatedData);
+        return 'Anda berhasil update Kebijakan!';
     }
 
     /**
@@ -81,6 +103,7 @@ class KebijakanController extends Controller
      */
     public function destroy(Kebijakan $kebijakan)
     {
-        //
+        Kebijakan::destroy($kebijakan->id);
+        return 'Anda berhasil menghapus Kebijakan!';
     }
 }

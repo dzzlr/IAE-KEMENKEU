@@ -15,7 +15,7 @@ class PerizinanController extends Controller
      */
     public function index()
     {
-        //
+        return Perizinan::all();
     }
 
     /**
@@ -36,7 +36,18 @@ class PerizinanController extends Controller
      */
     public function store(StorePerizinanRequest $request)
     {
-        //
+        $validatedData = $request->validate([
+            'no_izin' => 'required',
+            'id_user' => 'required',
+            'KJPP' => 'required',
+            'tanggal_izin' => 'required',
+            'klasifikasi_izin' => 'required',
+            'no_register_penilai' => 'required',
+            'no_induk' => 'required',
+        ]);
+
+        Perizinan::create($validatedData);
+        return 'Anda berhasil menambah Perizinan!';
     }
 
     /**
@@ -47,7 +58,7 @@ class PerizinanController extends Controller
      */
     public function show(Perizinan $perizinan)
     {
-        //
+        return Perizinan::where('id', $perizinan)->first();
     }
 
     /**
@@ -70,7 +81,18 @@ class PerizinanController extends Controller
      */
     public function update(UpdatePerizinanRequest $request, Perizinan $perizinan)
     {
-        //
+        $validatedData = $request->validate([
+            'no_izin' => 'required',
+            'id_user' => 'required',
+            'KJPP' => 'required',
+            'tanggal_izin' => 'required',
+            'klasifikasi_izin' => 'required',
+            'no_register_penilai' => 'required',
+            'no_induk' => 'required',
+        ]);
+
+        Perizinan::where('id', $perizinan->id)->update($validatedData);
+        return 'Anda berhasil update Perizinan!';
     }
 
     /**
@@ -81,6 +103,7 @@ class PerizinanController extends Controller
      */
     public function destroy(Perizinan $perizinan)
     {
-        //
+        Perizinan::destroy($perizinan->id);
+        return 'Anda berhasil menghapus Kebijakan!';
     }
 }

@@ -15,7 +15,7 @@ class SanksiController extends Controller
      */
     public function index()
     {
-        //
+        return Sanksi::all();
     }
 
     /**
@@ -36,7 +36,19 @@ class SanksiController extends Controller
      */
     public function store(StoreSanksiRequest $request)
     {
-        //
+        $validatedData = $request->validate([
+            'nomor_kebijakan' => 'required',
+            'judul_kebijakan' => 'required',
+            'nama_penandatanganan' => 'required',
+            'tanda_tangan' => 'required',
+            'isi' => 'required',
+            'tempat_ditetapkan' => 'required',
+            'tanggal_ditetapkan' => 'required',
+            'tentang' => 'required',
+        ]);
+
+        Sanksi::create($validatedData);
+        return 'Anda berhasil menambah Sanksi!';
     }
 
     /**
@@ -47,7 +59,7 @@ class SanksiController extends Controller
      */
     public function show(Sanksi $sanksi)
     {
-        //
+        return Sanksi::where('id', $sanksi)->first();
     }
 
     /**
@@ -70,7 +82,19 @@ class SanksiController extends Controller
      */
     public function update(UpdateSanksiRequest $request, Sanksi $sanksi)
     {
-        //
+        $validatedData = $request->validate([
+            'nomor_kebijakan' => 'required',
+            'judul_kebijakan' => 'required',
+            'nama_penandatanganan' => 'required',
+            'tanda_tangan' => 'required',
+            'isi' => 'required',
+            'tempat_ditetapkan' => 'required',
+            'tanggal_ditetapkan' => 'required',
+            'tentang' => 'required',
+        ]);
+
+        Sanksi::where('id', $sanksi->id)->update($validatedData);
+        return 'Anda berhasil update Sanksi!';
     }
 
     /**
@@ -81,6 +105,7 @@ class SanksiController extends Controller
      */
     public function destroy(Sanksi $sanksi)
     {
-        //
+        Sanksi::destroy($sanksi->id);
+        return 'Anda berhasil menghapus Sanksi!';
     }
 }

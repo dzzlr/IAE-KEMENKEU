@@ -13,9 +13,20 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('profesi_keuangans', function (Blueprint $table) {
+        Schema::create('profesi_keuangan', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->integer('id_user');
+            $table->integer('nik');
+            $table->integer('npw');
+            $table->string('nama');
+            $table->string('agama');
+            $table->date('tanggal_lahir');
+            $table->string('tempat_lahir');
+            $table->string('alamat');
+            $table->string('pangkat');
+            $table->string('gelar');
+            $table->string('jabatan');
+            $table->integer('umur');
         });
     }
 
