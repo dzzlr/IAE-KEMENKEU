@@ -25,36 +25,46 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 // Kebijakan
-Route::get('kebijakan', [KebijakanController::class, 'index']);
-Route::post('kebijakan/store', [KebijakanController::class, 'store']);
-Route::put('kebijakan/update/{id}', [KebijakanController::class, 'update']);
-Route::get('kebijakan/show/{id}', [KebijakanController::class, 'show']);
-Route::delete('kebijakan/delete/{id}', [KebijakanController::class, 'destroy']);
+Route::group(['prefix'=>'kebijakan'], function() {
+    Route::get('/', [KebijakanController::class, 'index']);
+    Route::post('/store', [KebijakanController::class, 'store']);
+    Route::put('/update/{id}', [KebijakanController::class, 'update']);
+    Route::get('/show/{id}', [KebijakanController::class, 'show']);
+    Route::delete('/delete/{id}', [KebijakanController::class, 'destroy']);
+});
 
 // Perizinan
-Route::get('perizinan', [PerizinanController::class, 'index']);
-Route::post('perizinan/store', [PerizinanController::class, 'store']);
-Route::put('perizinan/update/{id}', [PerizinanController::class, 'update']);
-Route::get('perizinan/show/{id}', [PerizinanController::class, 'show']);
-Route::delete('perizinan/delete/{id}', [PerizinanController::class, 'destroy']);
+Route::group(['prefix'=>'perizinan'], function() {
+    Route::get('/', [PerizinanController::class, 'index']);
+    Route::post('/store', [PerizinanController::class, 'store']);
+    Route::put('/update/{id}', [PerizinanController::class, 'update']);
+    Route::get('/show/{id}', [PerizinanController::class, 'show']);
+    Route::delete('/delete/{id}', [PerizinanController::class, 'destroy']);
+});
 
 // Profesi Keuangan
-Route::get('profesi-keuangan', [ProfesiKeuanganController::class, 'index']);
-Route::post('profesi-keuangan/store', [ProfesiKeuanganController::class, 'store']);
-Route::put('profesi-keuangan/update/{id}', [ProfesiKeuanganController::class, 'update']);
-Route::get('profesi-keuangan/show/{id}', [ProfesiKeuanganController::class, 'show']);
-Route::delete('profesi-keuangan/delete/{id}', [ProfesiKeuanganController::class, 'destroy']);
+Route::group(['prefix'=>'profesi-keuangan'], function() {
+    Route::get('/', [ProfesiKeuanganController::class, 'index']);
+    Route::post('/store', [ProfesiKeuanganController::class, 'store']);
+    Route::put('/update/{id}', [ProfesiKeuanganController::class, 'update']);
+    Route::get('/show/{id}', [ProfesiKeuanganController::class, 'show']);
+    Route::delete('/delete/{id}', [ProfesiKeuanganController::class, 'destroy']);
+});
 
 // Sanksi
-Route::get('sanksi', [SanksiController::class, 'index']);
-Route::post('sanksi/store', [SanksiController::class, 'store']);
-Route::put('sanksi/update/{id}', [SanksiController::class, 'update']);
-Route::get('sanksi/show/{id}', [SanksiController::class, 'show']);
-Route::delete('sanksi/delete/{id}', [SanksiController::class, 'destroy']);
+Route::group(['prefix'=>'sanksi'], function() {
+    Route::get('/', [SanksiController::class, 'index']);
+    Route::post('/store', [SanksiController::class, 'store']);
+    Route::put('/update/{id}', [SanksiController::class, 'update']);
+    Route::get('/show/{id}', [SanksiController::class, 'show']);
+    Route::delete('/delete/{id}', [SanksiController::class, 'destroy']);
+});
 
-// Sanksi
-Route::get('surat-tugas', [SuratTugasController::class, 'index']);
-Route::post('surat-tugas/store', [SuratTugasController::class, 'store']);
-Route::put('surat-tugas/update/{id}', [SuratTugasController::class, 'update']);
-Route::get('surat-tugas/show/{id}', [SuratTugasController::class, 'show']);
-Route::delete('surat-tugas/delete/{id}', [SuratTugasController::class, 'destroy']);
+// Surat Tugas
+Route::group(['prefix'=>'surat-tugas'], function() {
+    Route::get('/', [SuratTugasController::class, 'index']);
+    Route::post('/store', [SuratTugasController::class, 'store']);
+    Route::put('/update/{id}', [SuratTugasController::class, 'update']);
+    Route::get('/show/{id}', [SuratTugasController::class, 'show']);
+    Route::delete('/delete/{id}', [SuratTugasController::class, 'destroy']);
+});

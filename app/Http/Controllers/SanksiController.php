@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sanksi;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreSanksiRequest;
 use App\Http\Requests\UpdateSanksiRequest;
 
@@ -34,7 +35,7 @@ class SanksiController extends Controller
      * @param  \App\Http\Requests\StoreSanksiRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreSanksiRequest $request)
+    public function store(Request $request)
     {
         $validatedData = $request->validate([
             'nomor_kebijakan' => 'required',
@@ -80,7 +81,7 @@ class SanksiController extends Controller
      * @param  \App\Models\Sanksi  $sanksi
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateSanksiRequest $request, Sanksi $sanksi)
+    public function update(Request $request, Sanksi $sanksi)
     {
         $validatedData = $request->validate([
             'nomor_kebijakan' => 'required',

@@ -10,4 +10,18 @@ class ProfesiKeuangan extends Model
     use HasFactory;
     protected $table = 'profesi_keuangan';
     public $timestamps = false;
+    protected $fillable = [
+        'id_user',
+        'nik',
+        'npw',
+        'nama',
+        'agama',
+        'tanggal_lahir',
+        'tempat_lahir',
+        'alamat',
+        'pangkat',
+        'gelar',
+        'jabatan',
+        'umur',
+    ];
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProfesiKeuangan;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreProfesiKeuanganRequest;
 use App\Http\Requests\UpdateProfesiKeuanganRequest;
 
@@ -34,7 +35,7 @@ class ProfesiKeuanganController extends Controller
      * @param  \App\Http\Requests\StoreProfesiKeuanganRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreProfesiKeuanganRequest $request)
+    public function store(Request $request)
     {
         $validatedData = $request->validate([
             'id_user' => 'required',
@@ -84,7 +85,7 @@ class ProfesiKeuanganController extends Controller
      * @param  \App\Models\ProfesiKeuangan  $profesiKeuangan
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProfesiKeuanganRequest $request, ProfesiKeuangan $profesiKeuangan)
+    public function update(Request $request, ProfesiKeuangan $profesiKeuangan)
     {
         $validatedData = $request->validate([
             'id_user' => 'required',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Perizinan;
+use Illuminate\Http\Request;
 use App\Http\Requests\StorePerizinanRequest;
 use App\Http\Requests\UpdatePerizinanRequest;
 
@@ -34,7 +35,7 @@ class PerizinanController extends Controller
      * @param  \App\Http\Requests\StorePerizinanRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorePerizinanRequest $request)
+    public function store(Request $request)
     {
         $validatedData = $request->validate([
             'no_izin' => 'required',
@@ -79,7 +80,7 @@ class PerizinanController extends Controller
      * @param  \App\Models\Perizinan  $perizinan
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePerizinanRequest $request, Perizinan $perizinan)
+    public function update(Request $request, Perizinan $perizinan)
     {
         $validatedData = $request->validate([
             'no_izin' => 'required',

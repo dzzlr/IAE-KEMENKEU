@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kebijakan;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreKebijakanRequest;
 use App\Http\Requests\UpdateKebijakanRequest;
 
@@ -34,7 +35,7 @@ class KebijakanController extends Controller
      * @param  \App\Http\Requests\StoreKebijakanRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreKebijakanRequest $request)
+    public function store(Request $request)
     {
         $validatedData = $request->validate([
             'nomor_peraturan' => 'required',
@@ -79,7 +80,7 @@ class KebijakanController extends Controller
      * @param  \App\Models\Kebijakan  $kebijakan
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateKebijakanRequest $request, Kebijakan $kebijakan)
+    public function update(Request $request, Kebijakan $kebijakan)
     {
         $validatedData = $request->validate([
             'nomor_peraturan' => 'required',

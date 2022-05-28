@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SuratTugas;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreSuratTugasRequest;
 use App\Http\Requests\UpdateSuratTugasRequest;
 
@@ -34,7 +35,7 @@ class SuratTugasController extends Controller
      * @param  \App\Http\Requests\StoreSuratTugasRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreSuratTugasRequest $request)
+    public function store(Request $request)
     {
         $validatedData = $request->validate([
             'no_surat' => 'required',
@@ -82,7 +83,7 @@ class SuratTugasController extends Controller
      * @param  \App\Models\SuratTugas  $suratTugas
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateSuratTugasRequest $request, SuratTugas $suratTugas)
+    public function update(Request $request, SuratTugas $suratTugas)
     {
         $validatedData = $request->validate([
             'nomor_kebijakan' => 'required',
