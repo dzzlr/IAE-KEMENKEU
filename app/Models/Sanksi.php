@@ -11,11 +11,11 @@ class Sanksi extends Model
     protected $table = 'sanksi';
     public $timestamps = false;
     protected $fillable = [
-        'nomor_kebijakan',
-        'judul_kebijakan',
-        'nama_penandatanganan',
+        'nomor_sanksi',
+        'nama_sanksi',
+        'nama_penandatangan',
         'tanda_tangan',
-        'isi',
+        'isi_sanksi',
         'tempat_ditetapkan',
         'tanggal_ditetapkan',
         'tentang'

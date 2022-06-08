@@ -14,10 +14,11 @@ class Kebijakan extends Model
         'nomor_peraturan',
         'nama_peraturan',
         'isi_peraturan',
-        'tempat_di_tempatkan',
+        'tempat_di_tetapkan',
         'tanggal_di_tetapkan',
-        'nama_penandatanganan',
+        'nama_penandatangan',
         'tanda_tangan',
+        'status',
     ];
 
 }

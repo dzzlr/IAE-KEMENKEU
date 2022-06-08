@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
             [
                'name'=>'Admin',
                'email'=>'admin@gmail.com',
+               'no_hp'=>'081235678901',
                'password'=> Hash::make('12345'),
                'role'=>'admin',
                'image'=>'noimg.jpg',
@@ -27,25 +28,11 @@ class UserSeeder extends Seeder
             [
                'name'=>'Dazzler',
                'email'=>'dazzlerind07@gmail.com',
+               'no_hp'=>'081234567890',
                'password'=> Hash::make('fakhri123'),
                'role'=>'user',
                'image'=>'noimg.jpg',
             ],
-            [
-               'name'=>'Vendor1',
-               'email'=>'vendor1@gmail.com',
-               'password'=> Hash::make('vendor1'),
-               'role'=>'vendor',
-               'image'=>'noimg.jpg',
-            ],
-            [
-               'name'=>'Vendor2',
-               'email'=>'vendor2@gmail.com',
-               'password'=> Hash::make('vendor2'),
-               'role'=>'vendor',
-               'image'=>'noimg.jpg',
-            ],
-            
         ]; 
   
         foreach ($user as $key => $value) {

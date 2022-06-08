@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('tempat_id');
             $table->date('tanggal_ttd');
             $table->string('nama_penandatangan');
+            $table->string('status')->default('Diproses');
+            $table->timestamps();
         });
     }
 

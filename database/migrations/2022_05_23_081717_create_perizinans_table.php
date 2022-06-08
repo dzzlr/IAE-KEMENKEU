@@ -21,7 +21,9 @@ return new class extends Migration
             $table->integer('no_register_penilai');
             $table->string('KJPP');
             $table->string('klasifikasi_izin');
+            $table->string('status')->default('Diproses');
             $table->date('tanggal_izin');
+            $table->timestamps();
         });
     }
 

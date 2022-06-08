@@ -15,13 +15,15 @@ return new class extends Migration
     {
         Schema::create('kebijakan', function (Blueprint $table) {
             $table->id();
-            $table->integer('nomor_peraturan');
+            $table->string('nomor_peraturan');
             $table->string('nama_peraturan');
             $table->string('isi_peraturan');
-            $table->string('tempat_di_tempatkan');
+            $table->string('tempat_di_tetapkan');
             $table->date('tanggal_di_tetapkan');
-            $table->string('nama_penandatanganan');
+            $table->string('nama_penandatangan');
             $table->string('tanda_tangan');
+            $table->string('status')->default('Diproses');
+            $table->timestamps();
         });
     }
 
