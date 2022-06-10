@@ -10,6 +10,8 @@ use App\Http\Controllers\SanksiController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebController;
+use Illuminate\Support\Facades\Auth;
+
 
 
 use App\Http\Controllers\ChartJSController;
@@ -45,6 +47,7 @@ Route::get('/admin/perizinan/delete/{id}', [AdminController::class, 'deletePeriz
 Route::get('/admin/surat-tugas', [AdminController::class, 'indexSuratTugas'])->name('admin.show.surat-tugas')->middleware('admin_role');
 Route::post('/admin/surat-tugas/terima/{id}', [AdminController::class, 'statusSuratTugas'])->name('admin.terima.surat-tugas')->middleware('admin_role');
 Route::post('/admin/surat-tugas/tolak/{id}', [AdminController::class, 'statusSuratTugas'])->name('admin.tolak.surat-tugas')->middleware('admin_role');
+Route::post('/admin/surat-tugas/update/{id}', [AdminController::class, 'updateSuratTugas'])->name('admin.update.surat-tugas')->middleware('admin_role');
 Route::get('/admin/surat-tugas/cari', [AdminController::class, 'cariSuratTugas'])->name('admin.cari.surat-tugas')->middleware('admin_role');
 Route::get('/admin/surat-tugas/delete/{id}', [AdminController::class, 'deleteSuratTugas'])->name('admin.delete.surat-tugas')->middleware('admin_role');
 Route::get('/admin/sanksi', [AdminController::class, 'indexSanksi'])->name('admin.show.sanksi')->middleware('admin_role');
@@ -89,6 +92,17 @@ Route::get('/kebijakan/delete/{id}', [KebijakanController::class, 'destroy'])->n
 
 //USER
 Route::get('/home', [UserController::class, 'index'])->name('user.index')->middleware('user_role');
+Route::get('/profile', [UserController::class, 'profile'])->name('user.profile')->middleware('user_role');
 Route::get('/kebijakan', [UserController::class, 'indexKebijakan'])->name('kebijakan.index')->middleware('user_role');
+Route::get('/kebijakan/cari', [UserController::class, 'cariKebijakan'])->name('kebijakan.cari')->middleware('user_role');
+Route::get('/perizinan', [UserController::class, 'indexPerizinan'])->name('perizinan.index')->middleware('user_role');
+Route::get('/perizinan/cari', [UserController::class, 'cariPerizinan'])->name('perizinan.cari')->middleware('user_role');
+Route::post('/perizinan/pengajuan/simpan', [UserController::class, 'storePerizinan'])->name('perizinan.store')->middleware('user_role');
+Route::post('/perizinan/pengajuan/update', [UserController::class, 'updatePerizinan'])->name('perizinan.update')->middleware('user_role');
+Route::get('/perizinan/delete/{id}', [UserController::class, 'destroyPerizinan'])->name('perizinan.destroy')->middleware('user_role');
 Route::get('/sanksi', [UserController::class, 'indexSanksi'])->name('sanksi.index')->middleware('user_role');
-Route::get('/surat-tugas', [UserController::class, 'indexSuratTugas'])->name('st.index')->middleware('st_role');
+Route::get('/sanksi/cari', [UserController::class, 'cariSanksi'])->name('sanksi.cari')->middleware('user_role');
+Route::get('/surat-tugas', [UserController::class, 'indexSuratTugas'])->name('st.index')->middleware('user_role');
+Route::post('/surat-tugas/simpan', [UserController::class, 'storeSuratTugas'])->name('st.store')->middleware('user_role');
+Route::get('/surat-tugas/cari', [UserController::class, 'cariSuratTugas'])->name('st.cari')->middleware('user_role');
+Route::get('/surat-tugas/delete/{id', [UserController::class, 'destroySuratTugas'])->name('st.destroy')->middleware('user_role');

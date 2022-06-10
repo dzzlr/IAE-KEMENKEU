@@ -40,35 +40,7 @@
         </div>      
         <nav class="mt-3">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" >                
-            @if(Auth::user()->role == "user")
-            <li class="nav-item">
-              <a href="{{ route('user.index') }}" class="nav-link {{ request()->route()->getName() === 'user.index' ? 'active' : '' }}">
-                <i class="nav-icon fas fa-tachometer-alt"></i>
-                <p>Dashboard</p>
-              </a>
-            </li>     
-            <li class="nav-item">
-              <a href="../widgets.html" class="nav-link">
-                <i class="nav-icon fas fa-user"></i>
-                <p>Profil</p>
-              </a>
-            </li>  
-            {{-- <li class="nav-item">
-              <a href="../user/mendaftar" class="nav-link">
-                <i class="nav-icon fas fa-users"></i>
-                <p>Jadi user</p>
-              </a>
-            </li>              --}}
-            <li class="nav-item">
-              <a href="{{ route('user.show.materi') }}" class="nav-link {{ request()->route()->getName() === 'user.show.materi' || 
-                request()->route()->getName() === 'user.tambah.materi' ||
-                request()->route()->getName() === 'user.edit.materi' || 
-                request()->route()->getName() === 'user.cari.materi' ? 'active' : '' }}">
-                <i class="nav-icon fas fa-book"></i>
-                <p>Materi</p>
-              </a>
-            </li> 
-            @elseif(Auth::user()->role == "admin")
+            @if(Auth::user()->role == "admin")
             <li class="nav-item">
               <a href="{{ route('admin.index') }}" class="nav-link {{ request()->route()->getName() === 'admin.index' ? 'active' : '' }}">
                 <i class="nav-icon fas fa-tachometer-alt"></i>

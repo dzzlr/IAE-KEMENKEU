@@ -106,8 +106,8 @@
                         </div>
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-sm btn-default" data-dismiss="modal">Tutup</button>
-                    <button class="btn btn-sm btn-tambah" type="submit">Simpan</button>
+                    <button type="button" class="btn btn-sm bg-danger" data-dismiss="modal">Tutup</button>
+                    <button class="btn btn-sm bg-primary" type="submit">Simpan</button>
                     </form>
                 </div>
             </div>
@@ -197,6 +197,7 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
+                                                    @if($datas->status != "Diterbitkan")
                                                     <form
                                                         action="{{ url('/admin/kebijakan/update/'. $datas->id .'') }}"
                                                         enctype="multipart/form-data" method="post">
@@ -285,9 +286,99 @@
                                                                 </span>
                                                             @enderror
                                                         </div>
+                                                        @elseif($datas->status == 'Diterbitkan')
+                                                        <div class="form-group mb-1">
+                                                            <label for="nama_peraturan">Nama Peraturan</label>
+                                                            <input type="text"
+                                                                class="form-control form-control-sm @error('nama_peraturan') is-invalid @enderror"
+                                                                name="nama_peraturan" id="nama_peraturan"
+                                                                value="{{ $datas->nama_peraturan }}" readonly>
+                                                            @error('nama_peraturan')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong>{{ $message }}</strong>
+                                                                </span>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="form-group mb-1">
+                                                            <label for="nomor_peraturan">Nomor Peraturan</label>
+                                                            <input type="text"
+                                                                class="form-control form-control-sm @error('nomor_peraturan') is-invalid @enderror"
+                                                                name="nomor_peraturan" id="nomor_peraturan"
+                                                                value="{{ $datas->nomor_peraturan }}" readonly>
+                                                            @error('nomor_peraturan')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong>{{ $message }}</strong>
+                                                                </span>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="form-group mb-1">
+                                                            <label for="isi_peraturan">Isi Peraturan</label>
+                                                            <input type="text"
+                                                                class="form-control form-control-sm @error('isi_peraturan') is-invalid @enderror"
+                                                                name="isi_peraturan" id="isi_peraturan"
+                                                                value="{{ $datas->isi_peraturan }}" readonly>
+                                                            @error('isi_peraturan')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong>{{ $message }}</strong>
+                                                                </span>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <div class="row">
+                                                                    <div class="form-group mb-1">
+                                                                        <label for="tempat_di_tetapkan">Tempat di Tetapkan</label>
+                                                                        <input type="text"
+                                                                            class="form-control form-control-sm @error('tempat_di_tetapkan') is-invalid @enderror"
+                                                                            name="tempat_di_tetapkan" id="tempat_di_tetapkan"
+                                                                            value="{{ $datas->tempat_di_tetapkan }}" readonly>
+                                                                        @error('tempat_di_tetapkan')
+                                                                            <span class="invalid-feedback" role="alert">
+                                                                                <strong>{{ $message }}</strong>
+                                                                            </span>
+                                                                        @enderror
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="form-group mb-1">
+                                                                        <label for="tanggal_di_tetapkan">Tanggal di Tetapkan</label>
+                                                                        <input type="date"
+                                                                            class="form-control form-control-sm @error('tanggal_di_tetapkan') is-invalid @enderror"
+                                                                            name="tanggal_di_tetapkan" id="tanggal_di_tetapkan"
+                                                                            value="{{ $datas->tanggal_di_tetapkan }}" readonly>
+                                                                        @error('tanggal_di_tetapkan')
+                                                                            <span class="invalid-feedback" role="alert">
+                                                                                <strong>{{ $message }}</strong>
+                                                                            </span>
+                                                                        @enderror
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="form-group mb-1">
+                                                                        <label for="nama_penandatangan">Nama Penandatangan</label>
+                                                                        <input type="text"
+                                                                            class="form-control form-control-sm @error('nama_penandatangan') is-invalid @enderror"
+                                                                            name="nama_penandatangan" id="nama_penandatangan"
+                                                                            value="{{ $datas->nama_penandatangan }}" readonly>
+                                                                        @error('nama_penandatangan')
+                                                                            <span class="invalid-feedback" role="alert">
+                                                                                <strong>{{ $message }}</strong>
+                                                                            </span>
+                                                                        @enderror
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div class="form-group mb-2">
+                                                                    <label for="tanda_tangan">Tanda Tangan</label>
+                                                                    <img class="kebijakan ttd-border img-fluid" src="{{ asset('img/kebijakan/ttd/'. $datas->tanda_tangan .'') }}">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        @endif
                                                 </div>
                                                 <div class="modal-footer justify-content-between">
-                                                    <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Tutup</button>
+                                                    <button type="button" class="btn btn-sm bg-danger" data-dismiss="modal">Tutup</button>
                                                     <button class="btn btn-sm btn-primary" type="submit"
                                                     @if ($datas->status == 'Diterbitkan')
                                                         {{ 'disabled' }}

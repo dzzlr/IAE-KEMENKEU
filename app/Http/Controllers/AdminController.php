@@ -31,6 +31,7 @@ class AdminController extends Controller
                 ->paginate(10);
         return view('admin.showKebijakan', compact('data'));
     }
+
     public function storeKebijakan(Request $request)
     {
         $validate = $request->validate([
@@ -121,6 +122,14 @@ class AdminController extends Controller
         return view('admin.showPerizinan', compact('data'));
     }
 
+    public function cariPerizinan(Request $request) {
+        $keyword = $request->cari;
+        $data = DB::table('perizinan')
+                ->where('perizinan.KJPP', 'like', '%'. $keyword .'%')
+                ->paginate(10);
+        return view('admin.showPerizinan', compact('data'));
+    }
+
     public function statusPerizinan(Request $request, $id)
     {
         $data = Perizinan::find($id);                    
@@ -149,6 +158,38 @@ class AdminController extends Controller
                 ->orderBy('surat_tugas.created_at', 'DESC')
                 ->paginate(10);
         return view('admin.showSuratTugas', compact('data'));
+    }
+
+    public function cariSuratTugas(Request $request) {
+        $keyword = $request->cari;
+        $data = DB::table('surat_tugas')
+                ->where('surat_tugas.tempat', 'like', '%'. $keyword .'%')
+                ->paginate(10);
+        return view('admin.showSuratTugas', compact('data'));
+    }
+
+    public function updateSuratTugas(Request $request, $id)
+    {
+        $validate = $request->validate([
+            'tempat_id' => 'required',
+            'tanggal_ttd' => 'required',
+            'nama_penandatangan' => 'required',
+            'tanda_tangan' => 'required'            
+        ]);
+
+        if ($foto = $request->file('tanda_tangan')) {
+            $destinationPath = 'img/surat_tugas/ttd';  
+            $fileSource1 = $foto->getClientOriginalName();
+            $foto->move($destinationPath, $fileSource1);
+        }
+        $st = SuratTugas::find($id);
+        $st->tempat_id = $request->tempat_id;
+        $st->tanggal_ttd = $request->tanggal_ttd;
+        $st->nama_penandatangan = $request->nama_penandatangan;
+        $st->tanda_tangan = $fileSource1;
+        $st->save();
+
+        return redirect(route('admin.show.surat-tugas'))->with('success', 'Data Berhasil Diperbarui');
     }
 
     public function statusSuratTugas(Request $request, $id)

@@ -5,6 +5,9 @@
 @section('title-page', 'Perizinan')
 
 @section('content')
+@php
+    use Illuminate\Support\Facades\DB;
+@endphp
 <div class="row justify-content-center">
     <div class="col-md-12">
         @if(session('success'))
@@ -63,7 +66,7 @@
                                 <td>{{ $datas->KJPP }}</td>
                                 <td>{{ $datas->klasifikasi_izin }}</td>
                                 <td>{{ $datas->tanggal_izin }}</td>
-                                <td>{{ $datas->id_user }}</td>
+                                <td>{{ DB::table('users')->select('name')->where('id', $datas->id_user)->value('name') }}</td>
                                 <td class="d-flex">
                                     @if($datas->status == "Diterima")
                                         <span class="badge bg-success my-2">{{ $datas->status }}</span>                                    
@@ -107,7 +110,7 @@
                                                             <input type="text"
                                                                 class="form-control form-control-sm @error('no_izin') is-invalid @enderror"
                                                                 name="no_izin" id="no_izin"
-                                                                value="{{ $datas->no_izin }}" disabled>
+                                                                value="{{ $datas->no_izin }}" readonly>
                                                             @error('no_izin')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -119,7 +122,7 @@
                                                             <input type="text"
                                                                 class="form-control form-control-sm @error('no_induk') is-invalid @enderror"
                                                                 name="no_induk" id="no_induk"
-                                                                value="{{ $datas->no_induk }}" disabled>
+                                                                value="{{ $datas->no_induk }}" readonly>
                                                             @error('no_induk')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -131,7 +134,7 @@
                                                             <input type="text"
                                                                 class="form-control form-control-sm @error('no_register_penilai') is-invalid @enderror"
                                                                 name="no_register_penilai" id="no_register_penilai"
-                                                                value="{{ $datas->no_register_penilai }}" disabled>
+                                                                value="{{ $datas->no_register_penilai }}" readonly>
                                                             @error('no_register_penilai')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -143,7 +146,7 @@
                                                             <input type="text"
                                                                 class="form-control form-control-sm @error('KJPP') is-invalid @enderror"
                                                                 name="KJPP" id="KJPP"
-                                                                value="{{ $datas->KJPP }}" disabled>
+                                                                value="{{ $datas->KJPP }}" readonly>
                                                             @error('KJPP')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -155,7 +158,7 @@
                                                             <input type="text"
                                                                 class="form-control form-control-sm @error('klasifikasi_izin') is-invalid @enderror"
                                                                 name="klasifikasi_izin" id="klasifikasi_izin"
-                                                                value="{{ $datas->klasifikasi_izin }}" disabled>
+                                                                value="{{ $datas->klasifikasi_izin }}" readonly>
                                                             @error('klasifikasi_izin')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -167,7 +170,7 @@
                                                             <input type="date"
                                                                 class="form-control form-control-sm @error('tanggal_izin') is-invalid @enderror"
                                                                 name="tanggal_izin" id="tanggal_izin"
-                                                                value="{{ $datas->tanggal_izin }}" disabled>
+                                                                value="{{ $datas->tanggal_izin }}" readonly>
                                                             @error('tanggal_izin')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -179,7 +182,7 @@
                                                             <input type="text"
                                                                 class="form-control form-control-sm @error('id_user') is-invalid @enderror"
                                                                 name="id_user" id="id_user"
-                                                                value="{{ $datas->id_user }}" disabled>
+                                                                value="{{ DB::table('users')->select('name')->where('id', $datas->id_user)->value('name') }}" readonly>
                                                             @error('id_user')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -188,7 +191,7 @@
                                                         </div>
                                                 </div>
                                                 <div class="modal-footer justify-content-between">
-                                                    <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Tutup</button>
+                                                    <button type="button" class="btn btn-sm bg-danger" data-dismiss="modal">Tutup</button>
                                                     </form>
                                                 </div>
                                             </div>
