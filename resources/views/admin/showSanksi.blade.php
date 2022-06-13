@@ -183,7 +183,7 @@
                     <tbody>
                         @foreach($data as $key => $datas)
                             <tr>
-                                <td>{{ $data-> firstItem()+ $key }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $datas->nama_sanksi }}</td>
                                 <td>{{ $datas->nomor_sanksi }}</td>
                                 <td>{{ $datas->tanggal_ditetapkan }}</td>
@@ -459,15 +459,15 @@
                 </table>
                 <div class="float-left">
                     Menampilkan
-                    {{ $data->firstItem() }}
+                    {{-- {{ $data->firstItem() }} --}}
                     sampai
-                    {{ $data->lastItem() }}
+                    {{-- {{ $data->lastItem() }} --}}
                     dari
-                    {{ $data->total() }}
+                    {{-- {{ $data->total() }} --}}
                     data
                 </div>
                 <div class="float-right">
-                    {{ $data->links() }}
+                    {{-- {{ $data->links() }} --}}
                 </div>
             </div>
         </div>

@@ -8,6 +8,9 @@ use App\Models\Perizinan;
 use App\Models\SuratTugas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Http;
+
 
 class AdminController extends Controller
 {
@@ -215,11 +218,18 @@ class AdminController extends Controller
 
     //SECTION SANKSI
     public function indexSanksi() {
-        $data = dB::table('sanksi')
-                ->select('id','nomor_sanksi', 'nama_sanksi', 'isi_sanksi', 'tempat_ditetapkan', 'tanggal_ditetapkan', 'nama_penandatangan', 'tanda_tangan', 'tentang', 'status')
-                ->orderBy('sanksi.created_at', 'DESC')
-                ->paginate(10);
-        return view('admin.showSanksi', compact('data'));
+        // $data = dB::table('sanksi')
+        //         ->select('id','nomor_sanksi', 'nama_sanksi', 'isi_sanksi', 'tempat_ditetapkan', 'tanggal_ditetapkan', 'nama_penandatangan', 'tanda_tangan', 'tentang', 'status')
+        //         ->orderBy('sanksi.created_at', 'DESC')
+        //         ->paginate(10);
+
+        $sanksi = json_decode(Http::get('https://sanksi.herokuapp.com/api/sanksi'));
+
+        // $sanksi = collect($sanksi);
+        
+
+        // return view('admin.showSanksi', compact('data'));
+        return view('admin.showSanksi', ['data' => $sanksi]);
     }
     public function cariSanksi(Request $request) {
         $keyword = $request->cari;
@@ -230,35 +240,37 @@ class AdminController extends Controller
     }
     public function storeSanksi(Request $request)
     {
-        $validate = $request->validate([
-            'nama_sanksi' => 'required',
-            'nomor_sanksi' => 'required',
-            'isi_sanksi' => 'required',
-            'tempat_ditetapkan' => 'required',
-            'tanggal_ditetapkan' => 'required',
-            'nama_penandatangan' => 'required',
-            'tentang' => 'required',
-            'tanda_tangan' => 'required'            
-        ]);
+        // $validate = $request->validate([
+        //     'nama_sanksi' => 'required',
+        //     'nomor_sanksi' => 'required',
+        //     'isi_sanksi' => 'required',
+        //     'tempat_ditetapkan' => 'required',
+        //     'tanggal_ditetapkan' => 'required',
+        //     'nama_penandatangan' => 'required',
+        //     'tentang' => 'required',
+        //     'tanda_tangan' => 'required'            
+        // ]);
 
-        if ($foto = $request->file('tanda_tangan')) {
-            $destinationPath = 'img/sanksi/ttd';  
-            $fileSource1 = $foto->getClientOriginalName();
-            $foto->move($destinationPath, $fileSource1);
-        }
-        $kebijakan = Sanksi::create([
-            'nama_sanksi' => $request->nama_sanksi,
-            'nomor_sanksi' => $request->nomor_sanksi,
-            'isi_sanksi' => $request->isi_sanksi,
-            'tempat_ditetapkan' => $request->tempat_ditetapkan,
-            'tanggal_ditetapkan' => $request->tanggal_ditetapkan,
-            'nama_penandatangan' => $request->nama_penandatangan,
-            'tentang' => $request->tentang,
-            'tanda_tangan' => $fileSource1           
-        ]);
+        // if ($foto = $request->file('tanda_tangan')) {
+        //     $destinationPath = 'img/sanksi/ttd';  
+        //     $fileSource1 = $foto->getClientOriginalName();
+        //     $foto->move($destinationPath, $fileSource1);
+        // }
+        // $kebijakan = Sanksi::create([
+        //     'nama_sanksi' => $request->nama_sanksi,
+        //     'nomor_sanksi' => $request->nomor_sanksi,
+        //     'isi_sanksi' => $request->isi_sanksi,
+        //     'tempat_ditetapkan' => $request->tempat_ditetapkan,
+        //     'tanggal_ditetapkan' => $request->tanggal_ditetapkan,
+        //     'nama_penandatangan' => $request->nama_penandatangan,
+        //     'tentang' => $request->tentang,
+        //     'tanda_tangan' => $fileSource1           
+        // ]);
+
+        $url = 'https://sanksi.herokuapp.com/api/sanksi/store';
         
-
-        return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Ditambahkan');
+        return Redirect::away($url);
+        // return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Ditambahkan');
     }
 
     public function statusSanksi($id){
