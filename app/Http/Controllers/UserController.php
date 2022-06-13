@@ -19,6 +19,7 @@ class UserController extends Controller
     public function indexKebijakan() {
         $data = dB::table('kebijakan')
                 ->select('id','nomor_peraturan', 'nama_peraturan', 'isi_peraturan', 'tempat_di_tetapkan', 'tanggal_di_tetapkan', 'nama_penandatangan', 'tanda_tangan', 'status')
+                ->where('status', 'Diterbitkan')
                 ->orderBy('kebijakan.created_at', 'DESC')
                 ->paginate(10);
         return view('user.showKebijakan', compact('data'));
