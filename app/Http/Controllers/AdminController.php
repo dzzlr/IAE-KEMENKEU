@@ -295,7 +295,12 @@ class AdminController extends Controller
             'status' => $request->status,
         ]);
         if($response->getStatusCode() == 200) {
-            return redirect(route('admin.show.surat-tugas'))->with('success', 'Surat Tugas Berhasil '. ($request->status == 'Diterima') ? 'Diterima' : ' Ditolak' .'');
+            if (Auth::user()->role == 'admin') {
+                return redirect(route('admin.show.surat-tugas'))->with('success', 'Surat Tugas Berhasil '. ($request->status == 'Diterima') ? 'Diterima' : ' Ditolak' .'');
+            } elseif (Auth::user()->role == 'st') {
+                return redirect(route('st.index'))->with('success', "Surat Tugas Berhasil ". ($request->status == 'Diterima') ? 'Diterima' : ' Ditolak' ."");
+            }
+            
         }
     }
 
@@ -366,7 +371,11 @@ class AdminController extends Controller
         }
         $response = Http::attach('tanda_tangan', $thefile)->post($url, $request->input());
         if($response->getStatusCode() == 200) {
-            return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Ditambahkan');
+            if (Auth::user()->role == 'admin') {
+                return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Ditambahkan');
+            } elseif (Auth::user()->role == 'sanksi') {
+                return redirect(route('sanksi.index'))->with('success', 'Data Berhasil Ditambahkan');
+            }
         }
         // return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Ditambahkan');
     }
@@ -389,7 +398,11 @@ class AdminController extends Controller
             'status' => 'Diterbitkan',
         ]);
         if($response->getStatusCode() == 200) {
-            return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Diterbitkan');
+            if (Auth::user()->role == 'admin') {
+                return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Diterbitkan');
+            } elseif (Auth::user()->role == 'sanksi') {
+                return redirect(route('sanksi.index'))->with('success', 'Data Berhasil Diterbitkan');
+            }
         }
     }
 
@@ -423,7 +436,6 @@ class AdminController extends Controller
         // $sanksi->save();
 
         // return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Diperbarui');
-
         $url = ('https://sanksi.herokuapp.com/api/sanksi/update/'. $id .'');
         if ($request->hasFile('tanda_tangan')) {
         
@@ -435,7 +447,11 @@ class AdminController extends Controller
         }
         $response = Http::put($url, $request->input());
         if($response->getStatusCode() == 200) {
-            return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Diperbarui');
+            if (Auth::user()->role == 'admin') {
+                return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Diperbarui');
+            } elseif (Auth::user()->role == 'sanksi') {
+                return redirect(route('sanksi.index'))->with('success', 'Data Berhasil Diperbarui');
+            }   
         }
     }
 
@@ -444,6 +460,10 @@ class AdminController extends Controller
         // DB::table('sanksi')->where('id', $id)->delete();      
         $delete = Http::delete('https://sanksi.herokuapp.com/api/sanksi/delete/'. $id .'');
 
-        return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Dihapus');
+        if (Auth::user()->role == 'admin') {
+            return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Dihapus');
+        } elseif (Auth::user()->role == 'sanksi') {
+            return redirect(route('sanksi.index'))->with('success', 'Data Berhasil Dihapus');
+        }
     }
 }

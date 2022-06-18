@@ -5,6 +5,129 @@
 @section('title-page', 'Sanksi')
 
 @section('content')
+@if(Auth::user()->role == "sanksi")
+<div class="mb-3">
+    <button type="button" class="btn btn-sm btn-tambah text-light" style="background-color: #0869A6" data-toggle="modal" data-target="#tambahsanksi">
+        Tambah Sanksi
+    </button>
+    <div class="modal fade" id="tambahsanksi">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Sanksi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('admin.store.sanksi') }}" enctype="multipart/form-data"
+                        method="post">
+                        @csrf
+                        <div class="form-group mb-1">
+                            <label for="nomor_sanksi">Nomor Sanksi</label>
+                            <input type="text"
+                                class="form-control form-control-sm @error('nomor_sanksi') is-invalid @enderror"
+                                name="nomor_sanksi" id="nomor_sanksi"
+                                value="{{ old('nomor_sanksi') }}">
+                            @error('nomor_sanksi')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="nama_sanksi">Nama sanksi</label>
+                            <input type="text"
+                                class="form-control form-control-sm @error('nama_sanksi') is-invalid @enderror"
+                                name="nama_sanksi" id="nama_sanksi"
+                                value="{{ old('nama_sanksi') }}">
+                            @error('nama_sanksi')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="isi_sanksi">Isi Sanksi</label>
+                            <input type="text"
+                                class="form-control form-control-sm @error('isi_sanksi') is-invalid @enderror"
+                                name="isi_sanksi" id="isi_sanksi"
+                                value="{{ old('isi_sanksi') }}">
+                            @error('isi_sanksi')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="tempat_ditetapkan">Tempat ditetapkan</label>
+                            <input type="text"
+                                class="form-control form-control-sm @error('tempat_ditetapkan') is-invalid @enderror"
+                                name="tempat_ditetapkan" id="tempat_ditetapkan"
+                                value="{{ old('tempat_ditetapkan') }}">
+                            @error('tempat_ditetapkan')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="tanggal_ditetapkan">Tanggal ditetapkan</label>
+                            <input type="date"
+                                class="form-control form-control-sm @error('tanggal_ditetapkan') is-invalid @enderror"
+                                name="tanggal_ditetapkan" id="tanggal_ditetapkan"
+                                value="{{ old('tanggal_ditetapkan') }}">
+                            @error('tanggal_ditetapkan')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="nama_penandatangan">Nama Penandatangan</label>
+                            <input type="text"
+                                class="form-control form-control-sm @error('nama_penandatangan') is-invalid @enderror"
+                                name="nama_penandatangan" id="nama_penandatangan"
+                                value="{{ old('nama_penandatangan') }}">
+                            @error('nama_penandatangan')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="tentang">Tentang</label>
+                            <input type="text"
+                                class="form-control form-control-sm @error('tentang') is-invalid @enderror"
+                                name="tentang" id="tentang"
+                                value="{{ old('tentang') }}">
+                            @error('tentang')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group mb-1">
+                            <label for="tanda_tangan" class="form-label">Tanda Tangan</label>
+                            <input class="form-control @error('tanda_tangan') is-invalid @enderror" id="tanda_tangan"
+                                type="file" name="tanda_tangan">
+                            @error('tanda_tangan')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-sm bg-danger" data-dismiss="modal">Tutup</button>
+                    <button class="btn btn-sm bg-primary" type="submit">Simpan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
 <div class="row justify-content-center">
     <div class="col-md-12">
         @if(session('success'))
@@ -90,6 +213,8 @@
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
+                                                    <form action="{{ url('/sanksi/update/'. $datas->id .'') }}" enctype="multipart/form-data" method="post">
+                                                        @csrf
                                                     <div class="row">
                                                         <div class="col">
                                                             <div class="form-group mb-1">
@@ -97,7 +222,7 @@
                                                                 <input type="text"
                                                                     class="form-control form-control-sm @error('nama_sanksi') is-invalid @enderror"
                                                                     name="nama_sanksi" id="nama_sanksi"
-                                                                    value="{{ $datas->nama_sanksi }}" readonly>
+                                                                    value="{{ $datas->nama_sanksi }}" {{ ($datas->status == 'Diproses' && Auth::user()->role == 'sanksi') ? '' : 'disabled' }}>
                                                                 @error('nama_sanksi')
                                                                     <span class="invalid-feedback" role="alert">
                                                                         <strong>{{ $message }}</strong>
@@ -111,7 +236,7 @@
                                                                 <input type="text"
                                                                     class="form-control form-control-sm @error('nomor_sanksi') is-invalid @enderror"
                                                                     name="nomor_sanksi" id="nomor_sanksi"
-                                                                    value="{{ $datas->nomor_sanksi }}" readonly>
+                                                                    value="{{ $datas->nomor_sanksi }}" {{ ($datas->status == 'Diproses' && Auth::user()->role == 'sanksi') ? '' : 'disabled' }}>
                                                                 @error('nomor_sanksi')
                                                                     <span class="invalid-feedback" role="alert">
                                                                         <strong>{{ $message }}</strong>
@@ -127,7 +252,7 @@
                                                                 <input type="text"
                                                                     class="form-control form-control-sm @error('isi_sanksi') is-invalid @enderror"
                                                                     name="isi_sanksi" id="isi_sanksi"
-                                                                    value="{{ $datas->isi_sanksi }}" readonly>
+                                                                    value="{{ $datas->isi_sanksi }}" {{ ($datas->status == 'Diproses' && Auth::user()->role == 'sanksi') ? '' : 'disabled' }}>
                                                                 @error('isi_sanksi')
                                                                     <span class="invalid-feedback" role="alert">
                                                                         <strong>{{ $message }}</strong>
@@ -141,7 +266,7 @@
                                                                 <input type="text"
                                                                     class="form-control form-control-sm @error('tentang') is-invalid @enderror"
                                                                     name="tentang" id="tentang"
-                                                                    value="{{ $datas->tentang }}" readonly>
+                                                                    value="{{ $datas->tentang }}" {{ ($datas->status == 'Diproses' && Auth::user()->role == 'sanksi') ? '' : 'disabled' }}>
                                                                 @error('tentang')
                                                                     <span class="invalid-feedback" role="alert">
                                                                         <strong>{{ $message }}</strong>
@@ -158,7 +283,7 @@
                                                                     <input type="text"
                                                                         class="form-control form-control-sm @error('tempat_ditetapkan') is-invalid @enderror"
                                                                         name="tempat_ditetapkan" id="tempat_ditetapkan"
-                                                                        value="{{ $datas->tempat_ditetapkan }}" readonly>
+                                                                        value="{{ $datas->tempat_ditetapkan }}" {{ ($datas->status == 'Diproses' && Auth::user()->role == 'sanksi') ? '' : 'disabled' }}>
                                                                     @error('tempat_ditetapkan')
                                                                         <span class="invalid-feedback" role="alert">
                                                                             <strong>{{ $message }}</strong>
@@ -172,7 +297,7 @@
                                                                     <input type="date"
                                                                         class="form-control form-control-sm @error('tanggal_ditetapkan') is-invalid @enderror"
                                                                         name="tanggal_ditetapkan" id="tanggal_ditetapkan"
-                                                                        value="{{ $datas->tanggal_ditetapkan }}" readonly>
+                                                                        value="{{ $datas->tanggal_ditetapkan }}" {{ ($datas->status == 'Diproses' && Auth::user()->role == 'sanksi') ? '' : 'disabled' }}>
                                                                     @error('tanggal_ditetapkan')
                                                                         <span class="invalid-feedback" role="alert">
                                                                             <strong>{{ $message }}</strong>
@@ -183,10 +308,9 @@
                                                             <div class="row">
                                                                 <div class="form-group mb-1">
                                                                     <label for="nama_penandatangan">Nama Penandatangan</label>
-                                                                    <input type="text"
-                                                                        class="form-control form-control-sm @error('nama_penandatangan') is-invalid @enderror"
+                                                                    <input type="text" class="form-control form-control-sm @error('nama_penandatangan') is-invalid @enderror"
                                                                         name="nama_penandatangan" id="nama_penandatangan"
-                                                                        value="{{ $datas->nama_penandatangan }}" readonly>
+                                                                        value="{{ $datas->nama_penandatangan }}" {{ ($datas->status == 'Diproses' && Auth::user()->role == 'sanksi') ? '' : 'disabled' }}>
                                                                     @error('nama_penandatangan')
                                                                         <span class="invalid-feedback" role="alert">
                                                                             <strong>{{ $message }}</strong>
@@ -198,11 +322,19 @@
                                                         <div class="col">
                                                             <div class="form-group mb-2">
                                                                 <label for="tanda_tangan">Tanda Tangan</label>
+                                                                @if($datas->status == 'Diproses' && Auth::user()->role = 'sanksi')
+                                                                <input class="form-control @error('tanda_tangan') is-invalid @enderror" id="tanda_tangan"type="file" name="tanda_tangan">
+                                                                @error('tanda_tangan')
+                                                                <span class="invalid-feedback" role="alert">
+                                                                    <strong>{{ $message }}</strong>
+                                                                </span>
+                                                                @enderror
+                                                                @else
                                                                 <img class="kebijakan ttd-border img-fluid" src="{{ asset('img/sanksi/ttd/'. $datas->tanda_tangan .'') }}">
+                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    </form>
                                                     <div class="modal-footer justify-content-between">
                                                         <button type="button" class="btn btn-sm bg-danger" data-dismiss="modal">Tutup</button>
                                                         <button class="btn btn-sm btn-primary" type="submit"
@@ -210,9 +342,19 @@
                                                             {{ 'disabled' }}
                                                         @endif>Simpan</button>
                                                     </div>
+                                                </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    @if($datas->status =='Diproses' && Auth::user()->role == 'sanksi')
+                                        <a href="{{ url ('/sanksi/status/'. $datas->id) }}"
+                                            class="btn btn-warning btn-sm text-white">Terbitkan</a>
+                                    @endif
+                                    @if(Auth::user()->role == 'sanksi')
+                                    <a class="btn btn-danger btn-sm"
+                                        href="{{ url('/sanksi/delete/'.$datas->id) }}">Hapus</a>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

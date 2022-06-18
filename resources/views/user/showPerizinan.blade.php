@@ -7,18 +7,18 @@
 @section('content')
 @php
     use Illuminate\Support\Facades\DB;
+    use App\Models\User;
+    $user = User::all();
 @endphp
-@if(Auth::user()->role != 'perizinan')
+@if(Auth::user()->role == 'perizinan' || Auth::user()->role == 'profkeu')
     <div class="mb-3">
         <button type="button" class="btn btn-sm btn-tambah text-light" style="background-color: #0869A6"
-            data-toggle="modal" data-target="#tambahPerizinan">
-            Request Perizinan
-        </button>
+            data-toggle="modal" data-target="#tambahPerizinan">{{ (Auth::user()->role == 'perizinan') ? 'Tambah Perizinan' : 'Request Perizinan' }}</button>
         <div class="modal fade" id="tambahPerizinan">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Request Perizinan</h5>
+                        <h5 class="modal-title">{{ (Auth::user()->role == 'perizinan') ? 'Tambah Perizinan' : 'Request Perizinan' }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -27,7 +27,18 @@
                         <form action="{{ route('perizinan.store') }}" enctype="multipart/form-data"
                             method="post">
                             @csrf
+                            @if (Auth::user()->role == 'perizinan')
+                            <div class="form-group mb-1">
+                                <label for="id_user">ID Pengguna</label>
+                                <select name="id_user" class="form-select form-select-sm">
+                                @foreach ($user as $item)
+                                    <option value="{{ $item->id }}">{{ "".$item->id." - ". $item->name ."" }}</option>
+                                @endforeach
+                            </select>
+                            </div>
+                            @else
                             <input name="id_user" value="{{ Auth::user()->id }}" hidden>
+                            @endif
                             <div class="form-group mb-1">
                                 <label for="no_izin">Nomor Izin</label>
                                 <input type="text"

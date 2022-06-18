@@ -5,15 +5,20 @@
 @section('title-page', 'Surat Tugas')
 
 @section('content')
+@php
+    use App\Models\User;
+    $user = User::all();
+@endphp
+@if(Auth::user()->role == 'st')
 <div class="mb-3">
     <button type="button" class="btn btn-sm btn-tambah text-light" style="background-color: #0869A6" data-toggle="modal" data-target="#tambahSuratTugas">
-        Request Surat Tugas
+        Tambah Surat Tugas
     </button>
     <div class="modal fade" id="tambahSuratTugas">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Request Surat Tugas</h5>
+                    <h5 class="modal-title">Tambah Surat Tugas</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -22,7 +27,14 @@
                     <form action="{{ route('st.store') }}" enctype="multipart/form-data"
                         method="post">
                         @csrf
-                        <input name="id_user" value="{{ Auth::user()->id }}" hidden>
+                        <div class="form-group mb-1">
+                            <label for="id_user">ID Pengguna</label>
+                            <select name="id_user" class="form-select form-select-sm">
+                                @foreach ($user as $item)
+                                    <option value="{{ $item->id }}">{{ "".$item->id." - ". $item->name ."" }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="form-group mb-1">
                             <label for="no_surat">Nomor Surat</label>
                             <input type="text"
@@ -93,6 +105,7 @@
         </div>
     </div>
 </div>
+@endif
 <div class="row justify-content-center">
     <div class="col-md-12">
         @if(session('success'))
@@ -156,7 +169,20 @@
                                     @if($datas->status == "Diterima")
                                         <span class="badge bg-success my-2">{{ $datas->status }}</span>                                    
                                     @elseif($datas->status == "Diproses")
-                                        <span class="badge bg-light my-2">{{ $datas->status }}</span>                                              
+                                        @if(Auth::user()->role == 'st')
+                                            <form action="{{ url('/surat-tugas/terima/'.$datas->id) }}" method="post">
+                                                @csrf
+                                                <input type="text" name="status" value="Diterima" hidden>
+                                                <button type="submit" class="btn btn-sm btn-warning mb-1 mx-1">Terima</a> 
+                                            </form>                      
+                                            <form action="{{ url('/surat-tugas/tolak/'.$datas->id .'') }}" method="post">
+                                                @csrf
+                                                <input type="text" name="status" value="Ditolak" hidden>
+                                                <button type="submit" class="btn btn-sm btn-danger mb-1 mx-1">Tolak</a> 
+                                            </form>
+                                        @else
+                                            <span class="badge bg-light my-2">{{ $datas->status }}</span>    
+                                        @endif                                          
                                     @elseif($datas->status == "Ditolak")
                                         <span class="badge bg-danger my-2">{{ $datas->status }}</span>
                                     @endif
@@ -170,7 +196,7 @@
                                         <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title">Detail Kebijakan</h5>
+                                                    <h5 class="modal-title">Detail Surat Tugas</h5>
                                                     <button type="button" class="close" data-dismiss="modal"
                                                         aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
@@ -181,7 +207,14 @@
                                                         action="{{ url('/surat-tugas/update/'. $datas->id .'') }}"
                                                         enctype="multipart/form-data" method="post">
                                                         @csrf
-                                                        <input name="id_user" value="{{ $datas->id_user }}" hidden>
+                                                        <div class="mb-2">
+                                                            <label for="id_user">ID Pengguna</label>
+                                                            <select name="id_user" class="form-select form-select-sm" {{ ($datas->status == 'Diproses') && (Auth::user()->role == 'st') ? '' : 'disabled' }}>
+                                                                @foreach ($user as $item)
+                                                                    <option value="{{ $item->id }}" {{ ($item->id == $datas->id_user) ? 'selected' : '' }}>{{ "".$item->id." - ". $item->name ."" }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
                                                         <div class="row">
                                                             <div class="col">
                                                                 <div class="form-group mb-2">
@@ -189,7 +222,7 @@
                                                                     <input type="text"
                                                                         class="form-control form-control-sm @error('no_surat') is-invalid @enderror"
                                                                         name="no_surat" id="no_surat"
-                                                                        value="{{ $datas->no_surat }}" {{ ($datas->status == 'Diproses') ? '' : 'readonly' }}>
+                                                                        value="{{ $datas->no_surat }}" {{ ($datas->status == 'Diproses') && (Auth::user()->role == 'st') ? '' : 'readonly' }}>
                                                                     @error('no_surat')
                                                                         <span class="invalid-feedback" role="alert">
                                                                             <strong>{{ $message }}</strong>
@@ -203,7 +236,7 @@
                                                                     <input type="text"
                                                                         class="form-control form-control-sm @error('nomor_izin') is-invalid @enderror"
                                                                         name="nomor_izin" id="nomor_izin"
-                                                                        value="{{ $datas->nomor_izin }}" {{ ($datas->status == 'Diproses') ? '' : 'readonly' }}>
+                                                                        value="{{ $datas->nomor_izin }}" {{ ($datas->status == 'Diproses') && (Auth::user()->role == 'st') ? '' : 'readonly' }}>
                                                                     @error('nomor_izin')
                                                                         <span class="invalid-feedback" role="alert">
                                                                             <strong>{{ $message }}</strong>
@@ -219,7 +252,7 @@
                                                                     <input type="text"
                                                                         class="form-control form-control-sm @error('lingkup_kegiatan') is-invalid @enderror"
                                                                         name="lingkup_kegiatan" id="lingkup_kegiatan"
-                                                                        value="{{ $datas->lingkup_kegiatan }}" {{ ($datas->status == 'Diproses') ? '' : 'readonly' }}>
+                                                                        value="{{ $datas->lingkup_kegiatan }}" {{ ($datas->status == 'Diproses') && (Auth::user()->role == 'st') ? '' : 'readonly' }}>
                                                                     @error('lingkup_kegiatan')
                                                                         <span class="invalid-feedback" role="alert">
                                                                             <strong>{{ $message }}</strong>
@@ -233,7 +266,7 @@
                                                                     <input type="date"
                                                                         class="form-control form-control-sm @error('tanggal_kegiatan') is-invalid @enderror"
                                                                         name="tanggal_kegiatan" id="tanggal_kegiatan"
-                                                                        value="{{ $datas->tanggal_kegiatan }}" {{ ($datas->status == 'Diproses') ? '' : 'readonly' }}>
+                                                                        value="{{ $datas->tanggal_kegiatan }}" {{ ($datas->status == 'Diproses') && (Auth::user()->role == 'st') ? '' : 'readonly' }}>
                                                                     @error('tanggal_kegiatan')
                                                                         <span class="invalid-feedback" role="alert">
                                                                             <strong>{{ $message }}</strong>
@@ -249,7 +282,7 @@
                                                                     <textarea type="text"
                                                                         class="form-control form-control-sm @error('alamat') is-invalid @enderror"
                                                                         name="alamat" id="alamat"
-                                                                        value="" rows="3" {{ ($datas->status == 'Diproses') ? '' : 'readonly' }}>{{ $datas->alamat }}</textarea>
+                                                                        value="" rows="3" {{ ($datas->status == 'Diproses') && (Auth::user()->role == 'st') ? '' : 'readonly' }}>{{ $datas->alamat }}</textarea>
                                                                     @error('alamat')
                                                                         <span class="invalid-feedback" role="alert">
                                                                             <strong>{{ $message }}</strong>
@@ -260,7 +293,17 @@
                                                             <div class="col">
                                                                 <div class="form-group mb-2">
                                                                     <label for="tanda_tangan">Tanda Tangan</label>
+                                                                    @if($datas->status == 'Diproses')
+                                                                    <label for="tanda_tangan">Tanda Tangan</label>
+                                                                    <input class="form-control @error('tanda_tangan') is-invalid @enderror" id="tanda_tangan" type="file" name="tanda_tangan">
+                                                                        @error('tanda_tangan')
+                                                                            <span class="invalid-feedback" role="alert">
+                                                                                <strong>{{ $message }}</strong>
+                                                                            </span>
+                                                                        @enderror
+                                                                    @else
                                                                     <img class="ttd img-fluid" rows="3" src="{{ asset('img/surat_tugas/ttd/'. $datas->tanda_tangan .'') }}">
+                                                                    @endif
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -271,7 +314,7 @@
                                                                     <input type="text"
                                                                         class="form-control form-control-sm @error('tempat_id') is-invalid @enderror"
                                                                         name="tempat_id" id="tempat_id"
-                                                                        value="{{ $datas->tempat_id }}" readonly>
+                                                                        value="{{ $datas->tempat_id }}" {{ ($datas->status == 'Diproses') && (Auth::user()->role == 'st') ? '' : 'readonly' }}>
                                                                     @error('tempat_id')
                                                                         <span class="invalid-feedback" role="alert">
                                                                             <strong>{{ $message }}</strong>
@@ -282,10 +325,10 @@
                                                             <div class="col">
                                                                 <div class="form-group mb-2">
                                                                     <label for="tanggal_ttd">Tanggal Tanda Tangan</label>
-                                                                    <input type="text"
+                                                                    <input type="date"
                                                                         class="form-control form-control-sm @error('tanggal_ttd') is-invalid @enderror"
                                                                         name="tanggal_ttd" id="tanggal_ttd"
-                                                                        value="{{ $datas->tanggal_ttd }}" readonly>
+                                                                        value="{{ $datas->tanggal_ttd }}" {{ ($datas->status == 'Diproses') && (Auth::user()->role == 'st') ? '' : 'readonly' }}>
                                                                     @error('tanggal_ttd')
                                                                         <span class="invalid-feedback" role="alert">
                                                                             <strong>{{ $message }}</strong>
@@ -299,23 +342,24 @@
                                                             <input type="text"
                                                                 class="form-control form-control-sm @error('nama_penandatangan') is-invalid @enderror"
                                                                 name="nama_penandatangan" id="nama_penandatangan"
-                                                                value="{{ $datas->nama_penandatangan }}" readonly>
+                                                                value="{{ $datas->nama_penandatangan }}" {{ ($datas->status == 'Diproses') && (Auth::user()->role == 'st') ? '' : 'readonly' }}>
                                                             @error('nama_penandatangan')
                                                                 <span class="invalid-feedback" role="alert">
                                                                     <strong>{{ $message }}</strong>
                                                                 </span>
                                                             @enderror
                                                         </div>
+                                                        
                                                 </div>
                                                 <div class="modal-footer justify-content-between">
                                                     <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Tutup</button>
-                                                    <button type="submit" class="btn btn-sm btn-primary" {{ ($datas->status == 'Diproses') ? '' : 'disabled' }}>Simpan</button>
+                                                    <button type="submit" class="btn btn-sm btn-primary" {{ ($datas->status == 'Diproses') && (Auth::user()->role == 'st') ? '' : 'disabled' }}>Simpan</button>
                                                     </form>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    @if($datas->status != 'Diterima')
+                                    @if(Auth::user()->role == 'st')
                                     <a class="btn btn-danger btn-sm"
                                         href="{{ url('/surat-tugas/delete/'.$datas->id) }}">Hapus</a>
                                     @endif

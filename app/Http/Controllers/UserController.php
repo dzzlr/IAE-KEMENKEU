@@ -131,8 +131,12 @@ class UserController extends Controller
         //         ->where('id_user', Auth::user()->id)
         //         ->orderBy('surat_tugas.created_at', 'DESC')
         //         ->paginate(10);
-        $st = json_decode(Http::get('https://glacial-journey-17938.herokuapp.com/api/surat-tugas'));
-        $data = collect($st)->where('id_user', Auth::user()->id);
+        if (Auth::user()->role == 'profkeu') {
+            $st = json_decode(Http::get('https://glacial-journey-17938.herokuapp.com/api/surat-tugas'));
+            $data = collect($st)->where('id_user', Auth::user()->id);
+        } else {
+            $data = json_decode(Http::get('https://glacial-journey-17938.herokuapp.com/api/surat-tugas'));
+        }
         return view('user.showSuratTugas', compact('data'));
     }
 
@@ -193,7 +197,8 @@ class UserController extends Controller
 
     public function destroySuratTugas($id)
     {
-        DB::table('surat_tugas')->where('id', $id)->delete();        
+        // DB::table('surat_tugas')->where('id', $id)->delete();        
+        $delete = Http::delete('https://glacial-journey-17938.herokuapp.com/api/surat-tugas/delete/'. $id .'');
 
         return redirect(route('st.index'))->with('success', 'Data Berhasil Dihapus');
     }
@@ -205,8 +210,15 @@ class UserController extends Controller
         //         ->where('status', 'Diterbitkan')
         //         ->orderBy('sanksi.created_at', 'DESC')
         //         ->paginate(10);
-        $sanksi = json_decode(Http::get('https://sanksi.herokuapp.com/api/sanksi'));
-        $data = collect($sanksi)->where('status', 'Diterbitkan');
+        if (Auth::user()->role == 'profkeu') {
+            $st = json_decode(Http::get('https://sanksi.herokuapp.com/api/sanksi'));
+            $data = collect($st)->where('id_user', Auth::user()->id);
+        } elseif (Auth::user()->role == 'sanksi') {
+            $data = json_decode(Http::get('https://sanksi.herokuapp.com/api/sanksi'));
+        } else {
+            $sanksi = json_decode(Http::get('https://sanksi.herokuapp.com/api/sanksi'));
+            $data = collect($sanksi)->where('status', 'Diterbitkan');
+        }
         return view('user.showSanksi', compact('data'));
     }
 
