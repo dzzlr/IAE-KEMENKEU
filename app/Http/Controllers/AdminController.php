@@ -21,10 +21,11 @@ class AdminController extends Controller
 
     //SECTION KEBIJAKAN
     public function indexKebijakan() {
-        $data = dB::table('kebijakan')
-                ->select('id','nomor_peraturan', 'nama_peraturan', 'isi_peraturan', 'tempat_di_tetapkan', 'tanggal_di_tetapkan', 'nama_penandatangan', 'tanda_tangan', 'status')
-                ->orderBy('kebijakan.created_at', 'DESC')
-                ->paginate(10);
+        // $data = dB::table('kebijakan')
+        //         ->select('id','nomor_peraturan', 'nama_peraturan', 'isi_peraturan', 'tempat_di_tetapkan', 'tanggal_di_tetapkan', 'nama_penandatangan', 'tanda_tangan', 'status')
+        //         ->orderBy('kebijakan.created_at', 'DESC')
+        //         ->paginate(10);
+        $data = json_decode(Http::get('https://safe-tor-70401.herokuapp.com/api/kebijakan'));
         return view('admin.showKebijakan', compact('data'));
     }
     public function cariKebijakan(Request $request) {
@@ -47,36 +48,58 @@ class AdminController extends Controller
             'tanda_tangan' => 'required'            
         ]);
 
-        if ($foto = $request->file('tanda_tangan')) {
-            $destinationPath = 'img/kebijakan/ttd';  
-            $fileSource1 = $foto->getClientOriginalName();
-            $foto->move($destinationPath, $fileSource1);
+        $url = 'https://safe-tor-70401.herokuapp.com/api/kebijakan/store';
+        if ($request->hasFile('tanda_tangan')) {
+        
+            $tanda_tangan = $request->file('tanda_tangan');
+            $nama_lampiran = $tanda_tangan->getClientOriginalName();
+            $tanda_tangan->move("ttd", $nama_lampiran);
+            
+            $thefile = fopen("ttd/".$nama_lampiran, 'r');
         }
-        $kebijakan = Kebijakan::create([
-            'nama_peraturan' => $request->nama_peraturan,
-            'nomor_peraturan' => $request->nomor_peraturan,
-            'isi_peraturan' => $request->isi_peraturan,
-            'tempat_di_tetapkan' => $request->tempat_di_tetapkan,
-            'tanggal_di_tetapkan' => $request->tanggal_di_tetapkan,
-            'nama_penandatangan' => $request->nama_penandatangan,
-            'tanda_tangan' => $fileSource1           
-        ]);           
+        $response = Http::attach('tanda_tangan', $thefile)->post($url, $request->input());
+        
+        if($response->getStatusCode() == 200) {
+            return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Ditambahkan');
+        }
 
-        return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Ditambahkan');
+        // if ($foto = $request->file('tanda_tangan')) {
+        //     $destinationPath = 'img/kebijakan/ttd';  
+        //     $fileSource1 = $foto->getClientOriginalName();
+        //     $foto->move($destinationPath, $fileSource1);
+        // }
+        // $kebijakan = Kebijakan::create([
+        //     'nama_peraturan' => $request->nama_peraturan,
+        //     'nomor_peraturan' => $request->nomor_peraturan,
+        //     'isi_peraturan' => $request->isi_peraturan,
+        //     'tempat_di_tetapkan' => $request->tempat_di_tetapkan,
+        //     'tanggal_di_tetapkan' => $request->tanggal_di_tetapkan,
+        //     'nama_penandatangan' => $request->nama_penandatangan,
+        //     'tanda_tangan' => $fileSource1           
+        // ]);           
+
+        // return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Ditambahkan');
     }
 
     public function statusKebijakan($id){
-        $data = DB::table('kebijakan')->where('id', $id)->first();
+        // $data = DB::table('kebijakan')->where('id', $id)->first();
 
-        $status_sekarang = $data->status;
+        // $status_sekarang = $data->status;
 
-        if($status_sekarang=='Diproses'){
-            DB::table('kebijakan')->where('id',$id)->update([
-                'status'=>'Diterbitkan'
-            ]);
+        // if($status_sekarang=='Diproses'){
+        //     DB::table('kebijakan')->where('id',$id)->update([
+        //         'status'=>'Diterbitkan'
+        //     ]);
+        // }
+
+        // return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Diterbitkan');
+        $url = ('https://safe-tor-70401.herokuapp.com/api/kebijakan/update/'. $id.'');
+        $response = Http::put($url, [
+            'status' => 'Diterbitkan',
+        ]);
+        if($response->getStatusCode() == 200) {
+            return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Diterbitkan');
         }
-
-        return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Diterbitkan');
     }
 
     public function updateKebijakan(Request $request, $id)
@@ -91,27 +114,44 @@ class AdminController extends Controller
             'tanda_tangan' => 'required'            
         ]);
 
-        if ($foto = $request->file('tanda_tangan')) {
-            $destinationPath = 'img/kebijakan/ttd';  
-            $fileSource1 = $foto->getClientOriginalName();
-            $foto->move($destinationPath, $fileSource1);
-        }
-        $kebijakan = Kebijakan::find($id);
-        $kebijakan->nama_peraturan = $request->nama_peraturan;
-        $kebijakan->nomor_peraturan = $request->nomor_peraturan;
-        $kebijakan->isi_peraturan = $request->isi_peraturan;
-        $kebijakan->tempat_di_tetapkan = $request->tempat_di_tetapkan;
-        $kebijakan->tanggal_di_tetapkan = $request->tanggal_di_tetapkan;
-        $kebijakan->nama_penandatangan = $request->nama_penandatangan;
-        $kebijakan->tanda_tangan = $fileSource1;
-        $kebijakan->save();
+        // if ($foto = $request->file('tanda_tangan')) {
+        //     $destinationPath = 'img/kebijakan/ttd';  
+        //     $fileSource1 = $foto->getClientOriginalName();
+        //     $foto->move($destinationPath, $fileSource1);
+        // }
+        // $kebijakan = Kebijakan::find($id);
+        // $kebijakan->nama_peraturan = $request->nama_peraturan;
+        // $kebijakan->nomor_peraturan = $request->nomor_peraturan;
+        // $kebijakan->isi_peraturan = $request->isi_peraturan;
+        // $kebijakan->tempat_di_tetapkan = $request->tempat_di_tetapkan;
+        // $kebijakan->tanggal_di_tetapkan = $request->tanggal_di_tetapkan;
+        // $kebijakan->nama_penandatangan = $request->nama_penandatangan;
+        // $kebijakan->tanda_tangan = $fileSource1;
+        // $kebijakan->save();
 
-        return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Diperbarui');
+        // return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Diperbarui');
+
+        $url = ('https://safe-tor-70401.herokuapp.com/api/kebijakan/update/'. $id .'');
+        if ($request->hasFile('tanda_tangan')) {
+        
+            $tanda_tangan = $request->file('tanda_tangan');
+            $nama_lampiran = $tanda_tangan->getClientOriginalName();
+            $tanda_tangan->move("ttd", $nama_lampiran);
+            
+            $thefile = fopen("ttd/".$nama_lampiran, 'r');
+        }
+        $response = Http::put($url, $request->input());
+        if($response->getStatusCode() == 200) {
+            return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Diperbarui');
+        }
     }
 
     public function deleteKebijakan($id)
     {
-        DB::table('kebijakan')->where('id', $id)->delete();        
+        // DB::table('kebijakan')->where('id', $id)->delete();        
+
+        // return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Dihapus');
+        $delete = Http::delete('https://safe-tor-70401.herokuapp.com/api/kebijakan/delete/'. $id .'');
 
         return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Dihapus');
     }
@@ -224,7 +264,6 @@ class AdminController extends Controller
         //         ->paginate(10);
 
         $sanksi = json_decode(Http::get('https://sanksi.herokuapp.com/api/sanksi'));
-
         // $sanksi = collect($sanksi);
         
 
@@ -240,16 +279,16 @@ class AdminController extends Controller
     }
     public function storeSanksi(Request $request)
     {
-        // $validate = $request->validate([
-        //     'nama_sanksi' => 'required',
-        //     'nomor_sanksi' => 'required',
-        //     'isi_sanksi' => 'required',
-        //     'tempat_ditetapkan' => 'required',
-        //     'tanggal_ditetapkan' => 'required',
-        //     'nama_penandatangan' => 'required',
-        //     'tentang' => 'required',
-        //     'tanda_tangan' => 'required'            
-        // ]);
+        $validate = $request->validate([
+            'nama_sanksi' => 'required',
+            'nomor_sanksi' => 'required',
+            'isi_sanksi' => 'required',
+            'tempat_ditetapkan' => 'required',
+            'tanggal_ditetapkan' => 'required',
+            'nama_penandatangan' => 'required',
+            'tentang' => 'required',
+            'tanda_tangan' => 'required'            
+        ]);
 
         // if ($foto = $request->file('tanda_tangan')) {
         //     $destinationPath = 'img/sanksi/ttd';  
@@ -266,25 +305,42 @@ class AdminController extends Controller
         //     'tentang' => $request->tentang,
         //     'tanda_tangan' => $fileSource1           
         // ]);
-
         $url = 'https://sanksi.herokuapp.com/api/sanksi/store';
+        if ($request->hasFile('tanda_tangan')) {
         
-        return Redirect::away($url);
+            $tanda_tangan = $request->file('tanda_tangan');
+            $nama_lampiran = $tanda_tangan->getClientOriginalName();
+            $tanda_tangan->move("ttd", $nama_lampiran);
+            
+            $thefile = fopen("ttd/".$nama_lampiran, 'r');
+        }
+        $response = Http::attach('tanda_tangan', $thefile)->post($url, $request->input());
+        if($response->getStatusCode() == 200) {
+            return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Ditambahkan');
+        }
         // return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Ditambahkan');
     }
 
     public function statusSanksi($id){
-        $data = DB::table('sanksi')->where('id', $id)->first();
+        // $data = DB::table('sanksi')->where('id', $id)->first();
 
-        $status_sekarang = $data->status;
+        // $status_sekarang = $data->status;
 
-        if($status_sekarang=='Diproses'){
-            DB::table('sanksi')->where('id',$id)->update([
-                'status'=>'Diterbitkan'
-            ]);
+        // if($status_sekarang=='Diproses'){
+        //     DB::table('sanksi')->where('id',$id)->update([
+        //         'status'=>'Diterbitkan'
+        //     ]);
+        // }
+
+        // return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Diterbitkan');
+
+        $url = ('https://sanksi.herokuapp.com/api/sanksi/update/'. $id.'');
+        $response = Http::put($url, [
+            'status' => 'Diterbitkan',
+        ]);
+        if($response->getStatusCode() == 200) {
+            return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Diterbitkan');
         }
-
-        return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Diterbitkan');
     }
 
     public function updateSanksi(Request $request, $id)
@@ -300,28 +356,43 @@ class AdminController extends Controller
             'tanda_tangan' => 'required'            
         ]);
 
-        if ($foto = $request->file('tanda_tangan')) {
-            $destinationPath = 'img/sanksi/ttd';  
-            $fileSource1 = $foto->getClientOriginalName();
-            $foto->move($destinationPath, $fileSource1);
-        }
-        $sanksi = Sanksi::find($id);
-        $sanksi->nama_sanksi = $request->nama_sanksi;
-        $sanksi->nomor_sanksi = $request->nomor_sanksi;
-        $sanksi->isi_sanksi = $request->isi_sanksi;
-        $sanksi->tempat_ditetapkan = $request->tempat_ditetapkan;
-        $sanksi->tanggal_ditetapkan = $request->tanggal_ditetapkan;
-        $sanksi->nama_penandatangan = $request->nama_penandatangan;
-        $sanksi->tentang = $request->tentang;
-        $sanksi->tanda_tangan = $fileSource1;
-        $sanksi->save();
+        // if ($foto = $request->file('tanda_tangan')) {
+        //     $destinationPath = 'img/sanksi/ttd';  
+        //     $fileSource1 = $foto->getClientOriginalName();
+        //     $foto->move($destinationPath, $fileSource1);
+        // }
+        // $sanksi = Sanksi::find($id);
+        // $sanksi->nama_sanksi = $request->nama_sanksi;
+        // $sanksi->nomor_sanksi = $request->nomor_sanksi;
+        // $sanksi->isi_sanksi = $request->isi_sanksi;
+        // $sanksi->tempat_ditetapkan = $request->tempat_ditetapkan;
+        // $sanksi->tanggal_ditetapkan = $request->tanggal_ditetapkan;
+        // $sanksi->nama_penandatangan = $request->nama_penandatangan;
+        // $sanksi->tentang = $request->tentang;
+        // $sanksi->tanda_tangan = $fileSource1;
+        // $sanksi->save();
 
-        return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Diperbarui');
+        // return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Diperbarui');
+
+        $url = ('https://sanksi.herokuapp.com/api/sanksi/update/'. $id .'');
+        if ($request->hasFile('tanda_tangan')) {
+        
+            $tanda_tangan = $request->file('tanda_tangan');
+            $nama_lampiran = $tanda_tangan->getClientOriginalName();
+            $tanda_tangan->move("ttd", $nama_lampiran);
+            
+            $thefile = fopen("ttd/".$nama_lampiran, 'r');
+        }
+        $response = Http::put($url, $request->input());
+        if($response->getStatusCode() == 200) {
+            return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Diperbarui');
+        }
     }
 
     public function deleteSanksi($id)
     {
-        DB::table('sanksi')->where('id', $id)->delete();        
+        // DB::table('sanksi')->where('id', $id)->delete();      
+        $delete = Http::delete('https://sanksi.herokuapp.com/api/sanksi/delete/'. $id .'');
 
         return redirect(route('admin.show.sanksi'))->with('success', 'Data Berhasil Dihapus');
     }

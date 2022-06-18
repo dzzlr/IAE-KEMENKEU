@@ -183,11 +183,7 @@
                     <tbody>
                         @foreach($data as $key => $datas)
                             <tr>
-<<<<<<< HEAD
-                                <td>{{  }}</td>
-=======
                                 <td>{{ $loop->iteration }}</td>
->>>>>>> db49b5f7b384b2fe4d68ca0f4214945d1f24d095
                                 <td>{{ $datas->nama_sanksi }}</td>
                                 <td>{{ $datas->nomor_sanksi }}</td>
                                 <td>{{ $datas->tanggal_ditetapkan }}</td>
