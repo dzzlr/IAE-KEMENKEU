@@ -61,6 +61,7 @@ Route::get('/admin/sanksi/delete/{id}', [AdminController::class, 'deleteSanksi']
 //USER
 Route::get('/home', [UserController::class, 'index'])->name('user.index')->middleware('checkRole:user,perizinan,st,sanksi,kebijakan,profkeu');
 Route::get('/profile', [UserController::class, 'profile'])->name('user.profile')->middleware('checkRole:user,perizinan,st,sanksi,kebijakan,profkeu');
+Route::post('/profile/update/{id}', [UserController::class, 'profileUpdate'])->name('update.profile')->middleware('checkRole:user,perizinan,st,sanksi,kebijakan,profkeu');
 Route::get('/kebijakan', [UserController::class, 'indexKebijakan'])->name('kebijakan.index')->middleware('checkRole:user,perizinan,st,sanksi,kebijakan,profkeu');
 Route::get('/kebijakan/tambah', [AdminController::class, 'tambahKebijakan'])->name('admin.tambah.kebijakan')->middleware('checkRole:kebijakan');
 Route::post('/kebijakan/store', [AdminController::class, 'storeKebijakan'])->name('admin.store.kebijakan')->middleware('checkRole:kebijakan');

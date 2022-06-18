@@ -236,4 +236,26 @@ class UserController extends Controller
         $data_profile = collect($profile)->where('id_user', auth()->user()->id);
         return view('user.profile', compact('data', 'data_profile'));
     }
+    public function profileUpdate(Request $request, $id) {
+
+        $validate = $request->validate([
+            'nama' => 'required',
+            'tanggal_lahir' => 'required',
+            'tempat_lahir' => 'required',
+            'alamat' => 'required',
+            'agama' => 'required',
+            'umur' => 'required',              
+            'nik' => 'required',              
+            'npw' => 'required',              
+            'pangkat' => 'required',              
+            'gelar' => 'required',              
+            'jabatan' => 'required',              
+        ]);
+
+        $url = ('https://profesi-keuangan.herokuapp.com/api/profesi-keuangan/update/'. $id.'');
+        $response = Http::put($url, $request->input());
+        if($response->getStatusCode() == 200) {
+            return redirect(route('user.profile'))->with('success', 'Data Berhasil Diperbarui');
+        }
+    }
 }

@@ -46,7 +46,7 @@
               </a>
             </li>     
             <li class="nav-item">
-              <a href="{{ route('user.profile') }}" class="nav-link">
+              <a href="{{ route('user.profile') }}" class="nav-link {{ request()->route()->getName() === 'user.profile' ? 'active' : '' }} ">
                 <i class="nav-icon fa-solid fa-user"></i>
                 <p>Profil</p>
               </a>
