@@ -229,4 +229,11 @@ class UserController extends Controller
                 ->paginate(10);
         return view('user.showSanksi', compact('data'));
     }
+
+    public function profile() {
+        $data = DB::table('users')->where('id', auth()->user()->id);
+        $profile = json_decode(Http::get('https://profesi-keuangan.herokuapp.com/api/profesi-keuangan'));
+        $data_profile = collect($profile)->where('id_user', auth()->user()->id);
+        return view('user.profile', compact('data', 'data_profile'));
+    }
 }
