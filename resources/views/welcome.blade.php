@@ -105,6 +105,18 @@
                                     <a class="dropdown-item" href="{{ route('user.index') }}">
                                         {{ __('Dashboard Surat Tugas') }}
                                     </a>
+                                @elseif(Auth::user()->role == 'profkeu')
+                                    <a class="dropdown-item" href="{{ route('user.index') }}">
+                                        {{ __('Dashboard Profesi Keuangan') }}
+                                    </a>
+                                @elseif(Auth::user()->role == 'kebijakan')
+                                    <a class="dropdown-item" href="{{ route('user.index') }}">
+                                        {{ __('Dashboard Kebijakan') }}
+                                    </a>
+                                @elseif(Auth::user()->role == 'sanksi')
+                                    <a class="dropdown-item" href="{{ route('user.index') }}">
+                                        {{ __('Dashboard Sanksi') }}
+                                    </a>
                                 @endif
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                                  document.getElementById('logout-form').submit();">
