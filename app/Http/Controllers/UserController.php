@@ -23,8 +23,12 @@ class UserController extends Controller
         //         ->where('status', 'Diterbitkan')
         //         ->orderBy('kebijakan.created_at', 'DESC')
         //         ->paginate(10);
-        $kebijakan = json_decode(Http::get('https://safe-tor-70401.herokuapp.com/api/kebijakan'));
-        $data = collect($kebijakan)->where('status', 'Diterbitkan');
+        if (Auth::user()->role == 'kebijakan') {
+            $data = json_decode(Http::get('https://safe-tor-70401.herokuapp.com/api/kebijakan'));
+        } else {
+            $kebijakan = json_decode(Http::get('https://safe-tor-70401.herokuapp.com/api/kebijakan'));
+            $data = collect($kebijakan)->where('status', 'Diterbitkan');
+        }
         return view('user.showKebijakan', compact('data'));
     }
 
@@ -35,8 +39,12 @@ class UserController extends Controller
         //         ->where('id_user', Auth::user()->id)
         //         ->orderBy('perizinan.created_at', 'DESC')
         //         ->paginate(10);
-        $perizinan = json_decode(Http::get('https://radiant-castle-03940.herokuapp.com/api/perizinan'));
-        $data = collect($perizinan)->where('id_user', Auth::user()->id);
+        if (Auth::user()->role == 'perizinan') {
+            $data = json_decode(Http::get('https://radiant-castle-03940.herokuapp.com/api/perizinan'));
+        } else {
+            $perizinan = json_decode(Http::get('https://radiant-castle-03940.herokuapp.com/api/perizinan'));
+            $data = collect($perizinan)->where('id_user', Auth::user()->id);
+        }
         return view('user.showPerizinan', compact('data'));
     }
 
@@ -192,11 +200,13 @@ class UserController extends Controller
 
     //SECTION SANKSI
     public function indexSanksi() {
-        $data = dB::table('sanksi')
-                ->select('id','nomor_sanksi', 'nama_sanksi', 'isi_sanksi', 'tempat_ditetapkan', 'tanggal_ditetapkan', 'nama_penandatangan', 'tanda_tangan', 'tentang', 'status')
-                ->where('status', 'Diterbitkan')
-                ->orderBy('sanksi.created_at', 'DESC')
-                ->paginate(10);
+        // $data = dB::table('sanksi')
+        //         ->select('id','nomor_sanksi', 'nama_sanksi', 'isi_sanksi', 'tempat_ditetapkan', 'tanggal_ditetapkan', 'nama_penandatangan', 'tanda_tangan', 'tentang', 'status')
+        //         ->where('status', 'Diterbitkan')
+        //         ->orderBy('sanksi.created_at', 'DESC')
+        //         ->paginate(10);
+        $sanksi = json_decode(Http::get('https://sanksi.herokuapp.com/api/sanksi'));
+        $data = collect($sanksi)->where('status', 'Diterbitkan');
         return view('user.showSanksi', compact('data'));
     }
 

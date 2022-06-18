@@ -6,6 +6,8 @@ use App\Models\Perizinan;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePerizinanRequest;
 use App\Http\Requests\UpdatePerizinanRequest;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
 
 class PerizinanController extends Controller
 {
@@ -16,7 +18,8 @@ class PerizinanController extends Controller
      */
     public function index()
     {
-        return Perizinan::all();
+        $data = json_decode(Http::get('https://radiant-castle-03940.herokuapp.com/api/perizinan'));
+        return view('admin.showPerizinan', compact('data'));
     }
 
     /**

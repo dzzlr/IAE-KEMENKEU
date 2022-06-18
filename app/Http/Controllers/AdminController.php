@@ -8,6 +8,7 @@ use App\Models\Perizinan;
 use App\Models\SuratTugas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Http;
 
@@ -60,7 +61,11 @@ class AdminController extends Controller
         $response = Http::attach('tanda_tangan', $thefile)->post($url, $request->input());
         
         if($response->getStatusCode() == 200) {
-            return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Ditambahkan');
+            if (Auth::user()->role == 'admin') {
+                return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Ditambahkan');
+            } elseif (Auth::user()->role == 'kebijakan') {
+                return redirect(route('kebijakan.index'))->with('success', 'Data Berhasil Ditambahkan');
+            }
         }
 
         // if ($foto = $request->file('tanda_tangan')) {
@@ -98,7 +103,12 @@ class AdminController extends Controller
             'status' => 'Diterbitkan',
         ]);
         if($response->getStatusCode() == 200) {
-            return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Diterbitkan');
+            if (Auth::user()->role == 'admin') {
+                return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Diterbitkan');
+            } elseif (Auth::user()->role == 'kebijakan') {
+                return redirect(route('kebijakan.index'))->with('success', 'Data Berhasil Diterbitkan');
+            }
+            
         }
     }
 
@@ -142,7 +152,11 @@ class AdminController extends Controller
         }
         $response = Http::put($url, $request->input());
         if($response->getStatusCode() == 200) {
-            return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Diperbarui');
+            if (Auth::user()->role == 'admin') {
+                return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Diperbarui');
+            } elseif (Auth::user()->role == 'kebijakan') {
+                return redirect(route('kebijakan.index'))->with('success', 'Data Berhasil Diperbarui');
+            }
         }
     }
 
@@ -152,8 +166,11 @@ class AdminController extends Controller
 
         // return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Dihapus');
         $delete = Http::delete('https://safe-tor-70401.herokuapp.com/api/kebijakan/delete/'. $id .'');
-
-        return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Dihapus');
+        if (Auth::user()->role == 'admin') {
+            return redirect(route('admin.show.kebijakan'))->with('success', 'Data Berhasil Dihapus');
+        } elseif (Auth::user()->role == 'kebijakan') {
+            return redirect(route('kebijakan.index'))->with('success', 'Data Berhasil Dihapus');
+        }
     }
 
     //SECTION PERIZINAN
@@ -192,7 +209,11 @@ class AdminController extends Controller
             'status' => $request->status,
         ]);
         if($response->getStatusCode() == 200) {
-            return redirect(route('admin.show.perizinan'))->with('success', 'Perizinan Berhasil '. ($request->status == 'Diterima') ? 'Diterima' : ' Ditolak' .'');
+            if (Auth::user()->role == 'admin') {
+                return redirect(route('admin.show.perizinan'))->with('success', 'Perizinan Berhasil '. ($request->status == 'Diterima') ? 'Diterima' : ' Ditolak' .'');
+            } elseif (Auth::user()->role == 'perizinan') {
+                return redirect(route('perizinan.index'))->with('success', "Perizinan Berhasil ". ($request->status == 'Diterima') ? 'Diterima' : ' Ditolak' ."");
+            }
         }
     }
 

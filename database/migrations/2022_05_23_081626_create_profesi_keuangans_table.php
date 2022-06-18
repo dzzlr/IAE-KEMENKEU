@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->integer('id_user');
             $table->integer('nik');
-            $table->integer('npw');
+            $table->integer('npwp');
             $table->string('nama');
             $table->string('agama');
             $table->date('tanggal_lahir');

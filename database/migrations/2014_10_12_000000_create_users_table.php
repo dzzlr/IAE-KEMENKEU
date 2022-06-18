@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('no_hp')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('role',['user','perizinan', 'sanksi', 'st', 'kebijakan', 'profesi_keuangan','admin'])->default('user');
+            $table->enum('role',['user','perizinan', 'sanksi', 'st', 'kebijakan', 'profkeu','admin'])->default('profkeu');
             $table->string('image')->default('noimg.jpg');
             $table->rememberToken();
             $table->timestamps();

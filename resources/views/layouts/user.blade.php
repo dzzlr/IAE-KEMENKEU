@@ -38,7 +38,7 @@
         </div>      
         <nav class="mt-3">
           <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false" >                
-            @if(Auth::user()->role == "user")
+            @if(Auth::user()->role == "user" || Auth::user()->role == "kebijakan" || Auth::user()->role == "sanksi" || Auth::user()->role == "st" || Auth::user()->role == "profkeu" || Auth::user()->role == "perizinan")
             <li class="nav-item">
               <a href="{{ route('user.index') }}" class="nav-link {{ request()->route()->getName() === 'user.index' ? 'active' : '' }}">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -78,7 +78,7 @@
                 <p>Sanksi</p>                                            
               </a>
             </li>
-            @elseif(Auth::user()->level == "admin")
+          @elseif(Auth::user()->level == "admin")
             <li class="nav-item">
               <a href="{{ route('admin.index') }}" class="nav-link {{ request()->route()->getName() === 'admin.index' ? 'active' : '' }}">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -113,7 +113,7 @@
                 <p>Sanksi</p>                                            
               </a>
             </li> 
-            @endif                                    
+          @endif                                    
             <li class="nav-header"><hr style="border-top:1px solid white;"></li>                                                                                                             
             <li class="nav-item">
               <a class="nav-link" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
