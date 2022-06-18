@@ -6,6 +6,7 @@ use App\Models\Perizinan;
 use App\Models\SuratTugas;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 use Illuminate\Http\Request;
 
@@ -17,21 +18,25 @@ class UserController extends Controller
 
     //SECTION PERIZINAN
     public function indexKebijakan() {
-        $data = dB::table('kebijakan')
-                ->select('id','nomor_peraturan', 'nama_peraturan', 'isi_peraturan', 'tempat_di_tetapkan', 'tanggal_di_tetapkan', 'nama_penandatangan', 'tanda_tangan', 'status')
-                ->where('status', 'Diterbitkan')
-                ->orderBy('kebijakan.created_at', 'DESC')
-                ->paginate(10);
+        // $data = dB::table('kebijakan')
+        //         ->select('id','nomor_peraturan', 'nama_peraturan', 'isi_peraturan', 'tempat_di_tetapkan', 'tanggal_di_tetapkan', 'nama_penandatangan', 'tanda_tangan', 'status')
+        //         ->where('status', 'Diterbitkan')
+        //         ->orderBy('kebijakan.created_at', 'DESC')
+        //         ->paginate(10);
+        $kebijakan = json_decode(Http::get('https://safe-tor-70401.herokuapp.com/api/kebijakan'));
+        $data = collect($kebijakan)->where('status', 'Diterbitkan');
         return view('user.showKebijakan', compact('data'));
     }
 
     //SECTION PERIZINAN
     public function indexPerizinan() {
-        $data = dB::table('perizinan')
-                ->select('id', 'id_user' ,'no_izin', 'no_induk', 'no_register_penilai', 'KJPP', 'klasifikasi_izin', 'status', 'tanggal_izin')
-                ->where('id_user', Auth::user()->id)
-                ->orderBy('perizinan.created_at', 'DESC')
-                ->paginate(10);
+        // $data = dB::table('perizinan')
+        //         ->select('id', 'id_user' ,'no_izin', 'no_induk', 'no_register_penilai', 'KJPP', 'klasifikasi_izin', 'status', 'tanggal_izin')
+        //         ->where('id_user', Auth::user()->id)
+        //         ->orderBy('perizinan.created_at', 'DESC')
+        //         ->paginate(10);
+        $perizinan = json_decode(Http::get('https://radiant-castle-03940.herokuapp.com/api/perizinan'));
+        $data = collect($perizinan)->where('id_user', Auth::user()->id);
         return view('user.showPerizinan', compact('data'));
     }
 
@@ -55,17 +60,22 @@ class UserController extends Controller
             'tanggal_izin' => 'required'            
         ]);
 
-        $perizinan = Perizinan::create([
-            'id_user' => $request->id_user,
-            'no_izin' => $request->no_izin,
-            'no_induk' => $request->no_induk,
-            'no_register_penilai' => $request->no_register_penilai,
-            'KJPP' => $request->KJPP,
-            'klasifikasi_izin' => $request->klasifikasi_izin,
-            'tanggal_izin' => $request->tanggal_izin,
-        ]);           
+        $url = 'https://radiant-castle-03940.herokuapp.com/api/perizinan/store';
+        $response = Http::post($url, $request->input());
+        if($response->getStatusCode() == 200) {
+            return redirect(route('perizinan.index'))->with('success', 'Data Berhasil Ditambahkan');
+        }
+        // $perizinan = Perizinan::create([
+        //     'id_user' => $request->id_user,
+        //     'no_izin' => $request->no_izin,
+        //     'no_induk' => $request->no_induk,
+        //     'no_register_penilai' => $request->no_register_penilai,
+        //     'KJPP' => $request->KJPP,
+        //     'klasifikasi_izin' => $request->klasifikasi_izin,
+        //     'tanggal_izin' => $request->tanggal_izin,
+        // ]);           
 
-        return redirect(route('perizinan.index'))->with('success', 'Data Berhasil Ditambahkan');
+        // return redirect(route('perizinan.index'))->with('success', 'Data Berhasil Ditambahkan');
     }
 
     public function updatePerizinan(Request $request, $id)
@@ -79,32 +89,42 @@ class UserController extends Controller
             'klasifikasi_izin' => 'required',
             'tanggal_izin' => 'required'            
         ]);
-        $perizinan = Perizinan::find($id);
-        $perizinan->no_izin = $request->no_izin;
-        $perizinan->no_induk = $request->no_induk;
-        $perizinan->no_register_penilai = $request->no_register_penilai;
-        $perizinan->KJPP = $request->KJPP;
-        $perizinan->klasifikasi_izin = $request->klasifikasi_izin;
-        $perizinan->tanggal_izin = $request->tanggal_izin;
-        $perizinan->save();   
 
-        return redirect(route('perizinan.index'))->with('success', 'Data Berhasil Diperbarui');
+        $url = ('https://radiant-castle-03940.herokuapp.com/api/perizinan/update/'. $id.'');
+        $response = Http::put($url, $request->input());
+        if($response->getStatusCode() == 200) {
+            return redirect(route('perizinan.index'))->with('success', 'Data Berhasil Diperbarui');
+        }
+
+        // $perizinan = Perizinan::find($id);
+        // $perizinan->no_izin = $request->no_izin;
+        // $perizinan->no_induk = $request->no_induk;
+        // $perizinan->no_register_penilai = $request->no_register_penilai;
+        // $perizinan->KJPP = $request->KJPP;
+        // $perizinan->klasifikasi_izin = $request->klasifikasi_izin;
+        // $perizinan->tanggal_izin = $request->tanggal_izin;
+        // $perizinan->save();   
+
+        // return redirect(route('perizinan.index'))->with('success', 'Data Berhasil Diperbarui');
     }
 
     public function destroyPerizinan($id)
     {
-        DB::table('perizinan')->where('id', $id)->delete();        
+        // DB::table('perizinan')->where('id', $id)->delete();     
+        $delete = Http::delete('https://radiant-castle-03940.herokuapp.com/api/perizinan/delete/'. $id .'');   
 
         return redirect(route('perizinan.index'))->with('success', 'Data Berhasil Dihapus');
     }
 
     //SECTION SURAT TUGAS
     public function indexSuratTugas() {
-        $data = dB::table('surat_tugas')
-                ->select('id','id_user', 'no_surat', 'nomor_izin', 'lingkup_kegiatan', 'alamat', 'tanggal_kegiatan', 'tanda_tangan', 'tempat_id', 'nama_penandatangan', 'status', 'tanggal_ttd')
-                ->where('id_user', Auth::user()->id)
-                ->orderBy('surat_tugas.created_at', 'DESC')
-                ->paginate(10);
+        // $data = dB::table('surat_tugas')
+        //         ->select('id','id_user', 'no_surat', 'nomor_izin', 'lingkup_kegiatan', 'alamat', 'tanggal_kegiatan', 'tanda_tangan', 'tempat_id', 'nama_penandatangan', 'status', 'tanggal_ttd')
+        //         ->where('id_user', Auth::user()->id)
+        //         ->orderBy('surat_tugas.created_at', 'DESC')
+        //         ->paginate(10);
+        $st = json_decode(Http::get('https://glacial-journey-17938.herokuapp.com/api/surat-tugas'));
+        $data = collect($st)->where('id_user', Auth::user()->id);
         return view('user.showSuratTugas', compact('data'));
     }
 
@@ -127,16 +147,40 @@ class UserController extends Controller
             'tanggal_kegiatan' => 'required',         
         ]);
 
-        $perizinan = SuratTugas::create([
-            'id_user' => $request->id_user,
-            'no_surat' => $request->no_surat,
-            'nomor_izin' => $request->nomor_izin,
-            'lingkup_kegiatan' => $request->lingkup_kegiatan,
-            'alamat' => $request->alamat,
-            'tanggal_kegiatan' => $request->tanggal_kegiatan,
-        ]);           
+        $url = 'https://glacial-journey-17938.herokuapp.com/api/surat-tugas/store';
+        $response = Http::post($url, $request->input());
+        if($response->getStatusCode() == 200) {
+            return redirect(route('st.index'))->with('success', 'Data Berhasil Ditambahkan');
+        }
 
-        return redirect(route('st.index'))->with('success', 'Data Berhasil Ditambahkan');
+        // $perizinan = SuratTugas::create([
+        //     'id_user' => $request->id_user,
+        //     'no_surat' => $request->no_surat,
+        //     'nomor_izin' => $request->nomor_izin,
+        //     'lingkup_kegiatan' => $request->lingkup_kegiatan,
+        //     'alamat' => $request->alamat,
+        //     'tanggal_kegiatan' => $request->tanggal_kegiatan,
+        // ]);           
+
+        // return redirect(route('st.index'))->with('success', 'Data Berhasil Ditambahkan');
+    }
+
+    public function updateSuratTugas(Request $request, $id)
+    {
+        $validate = $request->validate([
+            'id_user' => 'required',
+            'no_surat' => 'required',
+            'nomor_izin' => 'required',
+            'lingkup_kegiatan' => 'required',
+            'alamat' => 'required',
+            'tanggal_kegiatan' => 'required',              
+        ]);
+
+        $url = ('https://glacial-journey-17938.herokuapp.com/api/surat-tugas/update/'. $id.'');
+        $response = Http::put($url, $request->input());
+        if($response->getStatusCode() == 200) {
+            return redirect(route('st.index'))->with('success', 'Data Berhasil Diperbarui');
+        }
     }
 
     public function destroySuratTugas($id)

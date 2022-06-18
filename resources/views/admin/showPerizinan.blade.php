@@ -62,7 +62,7 @@
                     <tbody>
                         @foreach($data as $key => $datas)
                             <tr>
-                                <td>{{  }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $datas->KJPP }}</td>
                                 <td>{{ $datas->klasifikasi_izin }}</td>
                                 <td>{{ $datas->tanggal_izin }}</td>

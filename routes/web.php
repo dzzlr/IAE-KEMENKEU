@@ -98,11 +98,12 @@ Route::get('/kebijakan/cari', [UserController::class, 'cariKebijakan'])->name('k
 Route::get('/perizinan', [UserController::class, 'indexPerizinan'])->name('perizinan.index')->middleware('user_role');
 Route::get('/perizinan/cari', [UserController::class, 'cariPerizinan'])->name('perizinan.cari')->middleware('user_role');
 Route::post('/perizinan/pengajuan/simpan', [UserController::class, 'storePerizinan'])->name('perizinan.store')->middleware('user_role');
-Route::post('/perizinan/pengajuan/update', [UserController::class, 'updatePerizinan'])->name('perizinan.update')->middleware('user_role');
+Route::post('/perizinan/pengajuan/update/{id}', [UserController::class, 'updatePerizinan'])->name('perizinan.update')->middleware('user_role');
 Route::get('/perizinan/delete/{id}', [UserController::class, 'destroyPerizinan'])->name('perizinan.destroy')->middleware('user_role');
 Route::get('/sanksi', [UserController::class, 'indexSanksi'])->name('sanksi.index')->middleware('user_role');
 Route::get('/sanksi/cari', [UserController::class, 'cariSanksi'])->name('sanksi.cari')->middleware('user_role');
 Route::get('/surat-tugas', [UserController::class, 'indexSuratTugas'])->name('st.index')->middleware('user_role');
 Route::post('/surat-tugas/simpan', [UserController::class, 'storeSuratTugas'])->name('st.store')->middleware('user_role');
+Route::post('/surat-tugas/update/{id}', [UserController::class, 'updateSuratTugas'])->name('st.update')->middleware('user_role');
 Route::get('/surat-tugas/cari', [UserController::class, 'cariSuratTugas'])->name('st.cari')->middleware('user_role');
-Route::get('/surat-tugas/delete/{id', [UserController::class, 'destroySuratTugas'])->name('st.destroy')->middleware('user_role');
+Route::get('/surat-tugas/delete/{id}', [UserController::class, 'destroySuratTugas'])->name('st.destroy')->middleware('user_role');

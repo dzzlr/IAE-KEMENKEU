@@ -147,7 +147,7 @@
                     <tbody>
                         @foreach($data as $key => $datas)
                             <tr>
-                                <td>{{  }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $datas->no_surat }}</td>
                                 <td>{{ $datas->lingkup_kegiatan }}</td>
                                 <td>{{ $datas->tanggal_kegiatan }}</td>
@@ -155,17 +155,8 @@
                                 <td class="d-flex">
                                     @if($datas->status == "Diterima")
                                         <span class="badge bg-success my-2">{{ $datas->status }}</span>                                    
-                                    @elseif($datas->status == "Diproses")              
-                                        <form action="{{ url('/admin/surat-tugas/terima/'.$datas->id) }}" method="post">
-                                            @csrf
-                                            <input type="text" name="status" value="Diterima" hidden>
-                                            <button type="submit" class="btn btn-sm btn-warning mb-1 mx-1">Terima</a> 
-                                        </form>                      
-                                        <form action="{{ url('/admin/surat-tugas/tolak/'.$datas->id .'') }}" method="post">
-                                            @csrf
-                                            <input type="text" name="status" value="Ditolak" hidden>
-                                            <button type="submit" class="btn btn-sm btn-danger mb-1 mx-1">Tolak</a> 
-                                        </form>                                     
+                                    @elseif($datas->status == "Diproses")
+                                        <span class="badge bg-light my-2">{{ $datas->status }}</span>                                              
                                     @elseif($datas->status == "Ditolak")
                                         <span class="badge bg-danger my-2">{{ $datas->status }}</span>
                                     @endif
@@ -187,9 +178,10 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <form
-                                                        action="{{ url('/admin/surat-tugas/update/'. $datas->id .'') }}"
+                                                        action="{{ url('/surat-tugas/update/'. $datas->id .'') }}"
                                                         enctype="multipart/form-data" method="post">
                                                         @csrf
+                                                        <input name="id_user" value="{{ $datas->id_user }}" hidden>
                                                         <div class="row">
                                                             <div class="col">
                                                                 <div class="form-group mb-2">
@@ -197,7 +189,7 @@
                                                                     <input type="text"
                                                                         class="form-control form-control-sm @error('no_surat') is-invalid @enderror"
                                                                         name="no_surat" id="no_surat"
-                                                                        value="{{ $datas->no_surat }}" readonly>
+                                                                        value="{{ $datas->no_surat }}" {{ ($datas->status == 'Diproses') ? '' : 'readonly' }}>
                                                                     @error('no_surat')
                                                                         <span class="invalid-feedback" role="alert">
                                                                             <strong>{{ $message }}</strong>
@@ -211,7 +203,7 @@
                                                                     <input type="text"
                                                                         class="form-control form-control-sm @error('nomor_izin') is-invalid @enderror"
                                                                         name="nomor_izin" id="nomor_izin"
-                                                                        value="{{ $datas->nomor_izin }}" readonly>
+                                                                        value="{{ $datas->nomor_izin }}" {{ ($datas->status == 'Diproses') ? '' : 'readonly' }}>
                                                                     @error('nomor_izin')
                                                                         <span class="invalid-feedback" role="alert">
                                                                             <strong>{{ $message }}</strong>
@@ -227,7 +219,7 @@
                                                                     <input type="text"
                                                                         class="form-control form-control-sm @error('lingkup_kegiatan') is-invalid @enderror"
                                                                         name="lingkup_kegiatan" id="lingkup_kegiatan"
-                                                                        value="{{ $datas->lingkup_kegiatan }}" readonly>
+                                                                        value="{{ $datas->lingkup_kegiatan }}" {{ ($datas->status == 'Diproses') ? '' : 'readonly' }}>
                                                                     @error('lingkup_kegiatan')
                                                                         <span class="invalid-feedback" role="alert">
                                                                             <strong>{{ $message }}</strong>
@@ -241,7 +233,7 @@
                                                                     <input type="date"
                                                                         class="form-control form-control-sm @error('tanggal_kegiatan') is-invalid @enderror"
                                                                         name="tanggal_kegiatan" id="tanggal_kegiatan"
-                                                                        value="{{ $datas->tanggal_kegiatan }}" readonly>
+                                                                        value="{{ $datas->tanggal_kegiatan }}" {{ ($datas->status == 'Diproses') ? '' : 'readonly' }}>
                                                                     @error('tanggal_kegiatan')
                                                                         <span class="invalid-feedback" role="alert">
                                                                             <strong>{{ $message }}</strong>
@@ -257,7 +249,7 @@
                                                                     <textarea type="text"
                                                                         class="form-control form-control-sm @error('alamat') is-invalid @enderror"
                                                                         name="alamat" id="alamat"
-                                                                        value="" rows="3" readonly>{{ $datas->alamat }}</textarea>
+                                                                        value="" rows="3" {{ ($datas->status == 'Diproses') ? '' : 'readonly' }}>{{ $datas->alamat }}</textarea>
                                                                     @error('alamat')
                                                                         <span class="invalid-feedback" role="alert">
                                                                             <strong>{{ $message }}</strong>
@@ -316,7 +308,8 @@
                                                         </div>
                                                 </div>
                                                 <div class="modal-footer justify-content-between">
-                                                    <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Tutup</button>
+                                                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Tutup</button>
+                                                    <button type="submit" class="btn btn-sm btn-primary" {{ ($datas->status == 'Diproses') ? '' : 'disabled' }}>Simpan</button>
                                                     </form>
                                                 </div>
                                             </div>

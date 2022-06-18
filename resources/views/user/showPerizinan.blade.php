@@ -162,7 +162,7 @@
                     <tbody>
                         @foreach($data as $key => $datas)
                             <tr>
-                                <td>{{  }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $datas->KJPP }}</td>
                                 <td>{{ $datas->klasifikasi_izin }}</td>
                                 <td>{{ $datas->tanggal_izin }}</td>
@@ -196,6 +196,7 @@
                                                         action="{{ url('/perizinan/pengajuan/update/'. $datas->id .'') }}"
                                                         enctype="multipart/form-data" method="post">
                                                         @csrf
+                                                        <input name="id_user" value="{{ $datas->id_user }}" hidden>
                                                         <div class="form-group mb-2">
                                                             <label for="no_izin">No Izin</label>
                                                             <input type="text"
@@ -298,7 +299,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @if($datas->status != 'Diterima')
+                                    @if($datas->status == 'Diproses')
                                     <a class="btn btn-danger btn-sm"
                                         href="{{ url('/perizinan/delete/'.$datas->id) }}">Hapus</a>
                                     @endif

@@ -158,10 +158,12 @@ class AdminController extends Controller
 
     //SECTION PERIZINAN
     public function indexPerizinan() {
-        $data = dB::table('perizinan')
-                ->select('id','id_user', 'no_izin', 'no_induk', 'no_register_penilai', 'KJPP', 'klasifikasi_izin', 'status', 'tanggal_izin')
-                ->orderBy('perizinan.created_at', 'DESC')
-                ->paginate(10);
+        // $data = dB::table('perizinan')
+        //         ->select('id','id_user', 'no_izin', 'no_induk', 'no_register_penilai', 'KJPP', 'klasifikasi_izin', 'status', 'tanggal_izin')
+        //         ->orderBy('perizinan.created_at', 'DESC')
+        //         ->paginate(10);
+        // return view('admin.showPerizinan', compact('data'));
+        $data = json_decode(Http::get('https://radiant-castle-03940.herokuapp.com/api/perizinan'));
         return view('admin.showPerizinan', compact('data'));
     }
 
@@ -175,31 +177,40 @@ class AdminController extends Controller
 
     public function statusPerizinan(Request $request, $id)
     {
-        $data = Perizinan::find($id);                    
+        // $data = Perizinan::find($id);                    
 
-        $validate = $request->validate([                      
-            'status' => 'required'                                  
-        ]);
+        // $validate = $request->validate([                      
+        //     'status' => 'required'                                  
+        // ]);
 
-        $data->status = $request->status;                      
-        $data->save();
+        // $data->status = $request->status;                      
+        // $data->save();
         
-        return redirect(route('admin.show.perizinan'))->with('success', 'Data Berhasil Diubah');
+        // return redirect(route('admin.show.perizinan'))->with('success', 'Data Berhasil Diubah');
+        $url = ('https://radiant-castle-03940.herokuapp.com/api/perizinan/update/'. $id.'');
+        $response = Http::put($url, [
+            'status' => $request->status,
+        ]);
+        if($response->getStatusCode() == 200) {
+            return redirect(route('admin.show.perizinan'))->with('success', 'Perizinan Berhasil '. ($request->status == 'Diterima') ? 'Diterima' : ' Ditolak' .'');
+        }
     }
 
     public function deletePerizinan($id)
     {
-        DB::table('perizinan')->where('id', $id)->delete();        
+        // DB::table('perizinan')->where('id', $id)->delete();        
+        $delete = Http::delete('https://radiant-castle-03940.herokuapp.com/api/perizinan/delete/'. $id .'');
 
         return redirect(route('admin.show.perizinan'))->with('success', 'Data Berhasil Dihapus');
     }
 
     //SECTION SURAT TUGAS
     public function indexSuratTugas() {
-        $data = dB::table('surat_tugas')
-                ->select('id','id_user', 'no_surat', 'nomor_izin', 'lingkup_kegiatan', 'alamat', 'tanggal_kegiatan', 'tanda_tangan', 'tempat_id', 'nama_penandatangan', 'status', 'tanggal_ttd')
-                ->orderBy('surat_tugas.created_at', 'DESC')
-                ->paginate(10);
+        // $data = dB::table('surat_tugas')
+        //         ->select('id','id_user', 'no_surat', 'nomor_izin', 'lingkup_kegiatan', 'alamat', 'tanggal_kegiatan', 'tanda_tangan', 'tempat_id', 'nama_penandatangan', 'status', 'tanggal_ttd')
+        //         ->orderBy('surat_tugas.created_at', 'DESC')
+        //         ->paginate(10);
+        $data = json_decode(Http::get('https://glacial-journey-17938.herokuapp.com/api/surat-tugas'));
         return view('admin.showSuratTugas', compact('data'));
     }
 
@@ -220,39 +231,57 @@ class AdminController extends Controller
             'tanda_tangan' => 'required'            
         ]);
 
-        if ($foto = $request->file('tanda_tangan')) {
-            $destinationPath = 'img/surat_tugas/ttd';  
-            $fileSource1 = $foto->getClientOriginalName();
-            $foto->move($destinationPath, $fileSource1);
+        $url = ('https://glacial-journey-17938.herokuapp.com/api/surat-tugas/update/'. $id .'');
+        if ($request->hasFile('tanda_tangan')) {
+        
+            $tanda_tangan = $request->file('tanda_tangan');
+            $nama_lampiran = $tanda_tangan->getClientOriginalName();
+            $tanda_tangan->move("ttd", $nama_lampiran);
+            
+            $thefile = fopen("ttd/".$nama_lampiran, 'r');
         }
-        $st = SuratTugas::find($id);
-        $st->tempat_id = $request->tempat_id;
-        $st->tanggal_ttd = $request->tanggal_ttd;
-        $st->nama_penandatangan = $request->nama_penandatangan;
-        $st->tanda_tangan = $fileSource1;
-        $st->save();
+        $response = Http::put($url, $request->input());
+
+        // if ($foto = $request->file('tanda_tangan')) {
+        //     $destinationPath = 'img/surat_tugas/ttd';  
+        //     $fileSource1 = $foto->getClientOriginalName();
+        //     $foto->move($destinationPath, $fileSource1);
+        // }
+        // $st = SuratTugas::find($id);
+        // $st->tempat_id = $request->tempat_id;
+        // $st->tanggal_ttd = $request->tanggal_ttd;
+        // $st->nama_penandatangan = $request->nama_penandatangan;
+        // $st->tanda_tangan = $fileSource1;
+        // $st->save();
 
         return redirect(route('admin.show.surat-tugas'))->with('success', 'Data Berhasil Diperbarui');
     }
 
     public function statusSuratTugas(Request $request, $id)
     {
-        $data = SuratTugas::find($id);                    
+        // $data = SuratTugas::find($id);                    
 
-        $validate = $request->validate([                      
-            'status' => 'required'                                  
-        ]);
+        // $validate = $request->validate([                      
+        //     'status' => 'required'                                  
+        // ]);
 
-        $data->status = $request->status;                      
-        $data->save();
+        // $data->status = $request->status;                      
+        // $data->save();
         
-        return redirect(route('admin.show.surat-tugas'))->with('success', 'Data Berhasil Diubah');
+        // return redirect(route('admin.show.surat-tugas'))->with('success', 'Data Berhasil Diubah');
+        $url = ('https://glacial-journey-17938.herokuapp.com/api/surat-tugas/update/'. $id.'');
+        $response = Http::put($url, [
+            'status' => $request->status,
+        ]);
+        if($response->getStatusCode() == 200) {
+            return redirect(route('admin.show.surat-tugas'))->with('success', 'Surat Tugas Berhasil '. ($request->status == 'Diterima') ? 'Diterima' : ' Ditolak' .'');
+        }
     }
 
     public function deleteSuratTugas($id)
     {
-        DB::table('surat_tugas')->where('id', $id)->delete();        
-
+        // DB::table('surat_tugas')->where('id', $id)->delete();
+        $delete = Http::delete('https://glacial-journey-17938.herokuapp.com/api/surat-tugas/delete/'. $id .'');
         return redirect(route('admin.show.surat-tugas'))->with('success', 'Data Berhasil Dihapus');
     }
 
