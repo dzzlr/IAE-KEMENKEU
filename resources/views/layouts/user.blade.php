@@ -32,7 +32,7 @@
     <aside class="main-sidebar sidebar-dark-primary bg-kmk elevation-4">    
       <div class="sidebar">      
         <div class="text-center mt-4">
-          <img src="{{ asset('image/profil/'. Auth::user()->foto_profile) }}" class="img-circle elevation-2" alt="User Image" style="max-width:100px; max-height:100px;">
+          {{-- <img src="{{ asset('image/profil/'. Auth::user()->foto_profile) }}" class="img-circle elevation-2" alt="User Image" style="max-width:100px; max-height:100px;"> --}}
           <a href="#" class="d-block mt-2" style="font-size:13px; color:white; font-weight:bold;">{{ Auth::user()->name }}</a>
           <a href="#" class="d-block" style="font-size:11px; color:white; font-weight:lighter;">{{ Auth::user()->level }}</a>
         </div>      
