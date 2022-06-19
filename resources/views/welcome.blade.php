@@ -146,7 +146,7 @@
                         <h1 class="display-1 lh-1 mb-3" style="color:#0869A6
                         ">Kementrian Keuangan RI</h1>
                         <p class="lead fw-normal text-muted mb-5">Sistem Informasi Pusat Pembinaan profesi Keuangan
-                            Kemnetrian Keuangan Republik Indonesia</p>
+                            Kemnetrian Keuangan Republik Indonesia  </p>
                         <div class="d-flex flex-column flex-lg-row align-items-center">
 
                             <a class="btn text-white text-center explore-more-button" style="background-color:#0869A6
