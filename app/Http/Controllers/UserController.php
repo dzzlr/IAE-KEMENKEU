@@ -210,10 +210,7 @@ class UserController extends Controller
         //         ->where('status', 'Diterbitkan')
         //         ->orderBy('sanksi.created_at', 'DESC')
         //         ->paginate(10);
-        if (Auth::user()->role == 'profkeu') {
-            $st = json_decode(Http::get('https://sanksi.herokuapp.com/api/sanksi'));
-            $data = collect($st)->where('id_user', Auth::user()->id);
-        } elseif (Auth::user()->role == 'sanksi') {
+        if (Auth::user()->role == 'sanksi') {
             $data = json_decode(Http::get('https://sanksi.herokuapp.com/api/sanksi'));
         } else {
             $sanksi = json_decode(Http::get('https://sanksi.herokuapp.com/api/sanksi'));
